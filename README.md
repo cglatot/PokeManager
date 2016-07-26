@@ -12,14 +12,14 @@ If you have any suggestions, and I like them, I will be happy to look into it - 
 
 It does 2 things:
 
-1  Allows you to view all your Pokemon and their states (CP and IVs)
-  1  It also groups / sorts alphabetically, and then by IV%
-  2  It also colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
-2  Allows you to mass transfer Pokemon
-  1  You can set "safe" limits of IV% and CP. This will not transfer anything that is above either of those levels.
-  2  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
-  3  It will ask how many of the "safe" Pokemon you want to transfer.
-  4  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
+1.  Allows you to view all your Pokemon and their states (CP and IVs)
+  1.  It also groups / sorts alphabetically, and then by IV%
+  2.  It also colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
+2.  Allows you to mass transfer Pokemon
+  1.  You can set "safe" limits of IV% and CP. This will not transfer anything that is above either of those levels.
+  2.  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
+  3.  It will ask how many of the "safe" Pokemon you want to transfer.
+  4.  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
 
 ## How to run it
 
