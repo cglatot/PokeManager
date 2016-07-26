@@ -23,6 +23,14 @@ It does 2 things:
 
 ## How to run it
 
+Make sure you have Python and the requirements installed. If you don't have Python installed, search how to do it. Use. Version 2.7+. Make sure you have pip as well.
+
+To install the requirements, open a CMD window in the root folder and run:
+
+```pip install -r requirements.txt```
+
+If this gives you an error about not finding pip, please search how to install Python and pip (and make sure python is added to your PATH).
+
 In the root directory there is a file called **PokeManager.bat**. Open it with your favourite editor and you should see this:
 
 ```python ".\pogo\demo.py" -a google -u "user@gmail.com" -p "password" -l "lat, long"```
