@@ -4,6 +4,7 @@ import logging
 import time
 import sys
 import operator
+import random
 from collections import Counter
 from custom_exceptions import GeneralPogoException
 
@@ -93,11 +94,20 @@ def massRemove(session):
 		logging.info('\nThis will transfer %s of this Pokemon',userNumber)
 	okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ')
 	
-	# Remove the pokemon!
+	# Remove the pokemon! Use randomness to reduce chance of bot detection
+	outlier = random.randint(8,12)
+	index = 0
 	if okayToProceed == 'y':
 		for monster in monstersToRelease:
+			index = index + 1
 			session.releasePokemon(monster[6])
-			time.sleep(2)
+			logging.info('Transferred...')
+			t = random.uniform(2.0, 5.0)
+			if index == outlier:
+				t = t * 3
+				outlier = random.randint(8,12)
+				index = 0
+			time.sleep(t)
 	
 	# Go back to the main menu
 	mainMenu(session)
