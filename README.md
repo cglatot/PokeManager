@@ -11,7 +11,7 @@ If you have any suggestions, and I like them, I will be happy to look into it - 
 
 ## What does it do?
 
-It does 2 things:
+It does 3 things:
 
 1.  Allows you to view all your Pokemon and their states (CP and IVs)
   1.  It also groups / sorts alphabetically, and then by IV%
@@ -21,6 +21,14 @@ It does 2 things:
   2.  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
   3.  It will ask how many of the "safe" Pokemon you want to transfer.
   4.  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
+3.  Allows you to rename your Pokemon to include their IVs
+  1.  Currently it will rename your Pokemon to IV%-ATK/DEF/STA. There is a char limit of 12, so no room for anything else. I chose IV first because you can order by name, thus getting highest IV.
+  2.  It allows you to set an IV% limit so it will only rename those Pokemon that are above that limit
+
+## Important info
+
+* Pokemon names must be in ALL CAPITALS. It uses the API names (easy to look up)
+* The release and rename functions will take a long time if there are a lot of pokemon. This is to help reduce bot detection by adding delays to requests
 
 ## How to run it
 

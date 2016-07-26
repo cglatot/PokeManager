@@ -116,6 +116,52 @@ def massRemove(session):
 	# Go back to the main menu
 	mainMenu(session)
 	
+def massRename(session):
+	party = session.checkInventory().party
+	myParty = []
+	
+	# Get the party and put it into a nicer list
+	for pokemon in party:
+		IvPercent = ((pokemon.individual_attack + pokemon.individual_defense + pokemon.individual_stamina)*100)/45
+		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon]
+		myParty.append(L)
+	
+	# Sort party by name and then IV percentage	
+	myParty.sort(key = operator.itemgetter(0, 5))
+	
+	# Ask the user to enter an IV threshold (to only rename good pokemon)
+	userThreshold = int(raw_input('Enter an IV% threshold to rename Pokemon (0 will rename all): '))
+	
+	# Refine a party with the IV threshold
+	print '\n NAME            | CP    | ATK | DEF | STA | IV% '
+	print '---------------- | ----- | --- | --- | --- | ----'
+	refinedParty = []
+	for monster in myParty:
+		if monster[5] > userThreshold:# and monster[6].nickname == '':
+			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].nickname)
+			refinedParty.append(monster)
+	
+	# Show how many it will rename and if they want to continue
+	logging.info('\nThis will rename %s Pokemon.',len(refinedParty))
+	okayToProceed = raw_input('Do you want to rename these Pokemon? (y/n): ')
+	
+	# Rename the pokemon! Use randomness to reduce chance of bot detection
+	outlier = random.randint(8,12)
+	index = 0
+	if okayToProceed == 'y':
+		for monster in refinedParty:
+			index = index + 1
+			session.nicknamePokemon(monster[6],str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]))
+			logging.info('Renamed ' + monster[0] + ' to ' + str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]))
+			t = random.uniform(4.0, 8.0)
+			if index == outlier:
+				t = t * 2
+				outlier = random.randint(8,12)
+				index = 0
+			time.sleep(t)
+	
+	mainMenu(session)
+	
 def viewPokemon(session):
 	party = session.checkInventory().party
 	myParty = []
@@ -148,15 +194,18 @@ def viewPokemon(session):
 	mainMenu(session)
 	
 def mainMenu(session):
-	print '\n\n'
-	print '1: View Pokemon'
-	print '2: Transfer Pokemon'
-	print '3: Exit'
+	print '\n\n  MAIN MENU'
+	print '  ---------'
+	print '  1: View Pokemon'
+	print '  2: Transfer Pokemon'
+	print '  3: Rename Pokemon'
+	print '  4: Exit'
 	
 	menuChoice = int(raw_input("\nEnter choice: "))
 	if menuChoice == 1: viewPokemon(session)
 	elif menuChoice == 2: massRemove(session)
-	elif menuChoice == 3: quit()
+	elif menuChoice == 3: massRename(session)
+	elif menuChoice == 4: quit()
 	else: quit()
 		
 		
