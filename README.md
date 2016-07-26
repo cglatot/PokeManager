@@ -56,4 +56,4 @@ If you want to use PTC, change `-a google` to `-a ptc`
 
 ### Transferring Pokemon
 
-![Transferring Pokemon](/media/transfer_pokemon.png?raw=true "Transfer Pokemon")
+![Transferring Pokemon](/media/transfer_pokemon2.png?raw=true "Transfer Pokemon")
