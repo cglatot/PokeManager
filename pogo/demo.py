@@ -115,11 +115,13 @@ def massRemove(session):
 	# Remove the pokemon! Use randomness to reduce chance of bot detection
 	outlier = random.randint(8,12)
 	index = 0
+	counter = 1
 	if okayToProceed == 'y':
 		for monster in monstersToRelease:
 			index = index + 1
+			counter = counter + 1
 			session.releasePokemon(monster[6])
-			logging.info('Transferring Pokemon %s of %s...',index,len(monstersToRelease))
+			logging.info('Transferring Pokemon %s of %s...',counter,len(monstersToRelease))
 			t = random.uniform(2.0, 5.0)
 			if index == outlier:
 				t = t * 3
