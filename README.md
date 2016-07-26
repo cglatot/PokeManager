@@ -11,18 +11,19 @@ If you have any suggestions, and I like them, I will be happy to look into it - 
 
 ## What does it do?
 
-It does 3 things:
+It does 4 things:
 
 1.  Allows you to view all your Pokemon and their states (CP and IVs)
   1.  It also groups / sorts alphabetically, and then by IV%
   2.  It also colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
-2.  Allows you to mass transfer Pokemon
+2.  Allows you to view how many of each Pokemon you have, as well as how many candies you have for that Pokemon
+3.  Allows you to mass transfer Pokemon
   1.  You can set "safe" limits of IV% and CP. This will not transfer anything that is above either of those levels.
   2.  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
   3.  It will ask how many of the "safe" Pokemon you want to transfer.
   4.  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
   5.  If specifying certain numbers (lower than the total "safe" Pokemon) it will always transfer the lowest IV% Pokemon first
-3.  Allows you to rename your Pokemon to include their IVs
+4.  Allows you to rename your Pokemon to include their IVs
   1.  Currently it will rename your Pokemon to IV%-ATK/DEF/STA. There is a char limit of 12, so no room for anything else. I chose IV first because you can order by name, thus getting highest IV.
   2.  It allows you to set an IV% limit so it will only rename those Pokemon that are above that limit
 
@@ -58,11 +59,15 @@ If you want to use PTC, change `-a google` to `-a ptc`
 
 ### Main Menu
 
-![Main Menu](/media/main_menu.png?raw=true "Main Menu")
+![Main Menu](/media/main_menu2.png?raw=true "Main Menu")
 
 ### Viewing Pokemon
 
 ![Viewing Pokemon](/media/view_pokemon.png?raw=true "View Pokemon")
+
+### Viewing Totals of Pokemon
+
+![Counting Pokemon](/media/count_pokemon.png?raw=true "Count Pokemon")
 
 ### Transferring Pokemon
 

@@ -176,6 +176,41 @@ def massRename(session):
 	
 	mainMenu(session)
 	
+def viewCounts(session):
+	party = session.checkInventory().party
+	myParty = []
+	
+	# Get the party and put it into a nicer list
+	for pokemon in party:
+		L = pokedex[pokemon.pokemon_id]
+		myParty.append(L)
+	
+	# Count the number of pokemon, put them in a list, and sort alphabetically
+	countRepeats = Counter(myParty)
+	countList = countRepeats.items()
+	
+	sortBy = int(raw_input('How to sort the list? (1 = Alphabetically, 2 = Total Numbers): '))
+	countList.sort(key = operator.itemgetter(sortBy -1))
+	
+	# Print the list of pokemon in a nicer format
+	print '\n NAME            | COUNT | CANDIES '
+	print '---------------- | ----- | ------- '
+	for monster in countList:
+		pokedexNum = getattr(pokedex, monster[0])
+		try:
+			candies = session.checkInventory().candies[pokedexNum]
+		except:
+			try:
+				candies = session.checkInventory().candies[pokedexNum - 1]
+			except:
+				try:
+					candies = session.checkInventory().candies[pokedexNum - 2]
+				except:
+					candies = 0
+		print ' %-15s | %-5d | %d ' % (monster[0], monster[1], candies)
+	
+	mainMenu(session)
+	
 def viewPokemon(session):
 	party = session.checkInventory().party
 	myParty = []
@@ -211,15 +246,17 @@ def mainMenu(session):
 	print '\n\n  MAIN MENU'
 	print '  ---------'
 	print '  1: View Pokemon'
-	print '  2: Transfer Pokemon'
-	print '  3: Rename Pokemon'
-	print '  4: Exit'
+	print '  2: View Counts'
+	print '  3: Transfer Pokemon'
+	print '  4: Rename Pokemon'
+	print '  5: Exit'
 	
 	menuChoice = int(raw_input("\nEnter choice: "))
 	if menuChoice == 1: viewPokemon(session)
-	elif menuChoice == 2: massRemove(session)
-	elif menuChoice == 3: massRename(session)
-	elif menuChoice == 4: quit()
+	elif menuChoice == 2: viewCounts(session)
+	elif menuChoice == 3: massRemove(session)
+	elif menuChoice == 4: massRename(session)
+	elif menuChoice == 5: quit()
 	else: quit()
 		
 		
