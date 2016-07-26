@@ -119,7 +119,7 @@ def massRemove(session):
 		for monster in monstersToRelease:
 			index = index + 1
 			session.releasePokemon(monster[6])
-			logging.info('Transferred...')
+			logging.info('Transferring Pokemon %s of %s...',index,len(monstersToRelease))
 			t = random.uniform(2.0, 5.0)
 			if index == outlier:
 				t = t * 3
