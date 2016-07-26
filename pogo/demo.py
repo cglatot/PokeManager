@@ -97,7 +97,7 @@ def massRemove(session):
 	if okayToProceed == 'y':
 		for monster in monstersToRelease:
 			session.releasePokemon(monster[6])
-			time.sleep(1)
+			time.sleep(2)
 	
 	# Go back to the main menu
 	mainMenu(session)
