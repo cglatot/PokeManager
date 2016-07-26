@@ -2,9 +2,10 @@
 
 This was a project that I decided to throw together to fill a niche that hasn't yet been filled. I won't be actively updating this, and there is not much error handling, so **use with care**.
 
-This is essentially just a modified demo of the [Python API for Pokemon Go available here](https://github.com/rubenvereecken/pokemongo-api), so give them the credit.
+This is essentially just a modified demo of the [Python API for Pokemon Go available here](https://github.com/rubenvereecken/pokemongo-api), so give them the credit. Also, anything that will
+work for that API will work here as well.
 
-I just tweaked it to do what I want. Feel free to reuse this without asking. I just wanted something until someone made something better.
+I just tweaked it to do what I want. Feel free to reuse this. I just wanted something until someone made something better.
 
 If you have any suggestions, and I like them, I will be happy to look into it - but please don't expect me to be as active as the other developments going on.
 
@@ -23,7 +24,7 @@ It does 2 things:
 
 ## How to run it
 
-Make sure you have Python and the requirements installed. If you don't have Python installed, search how to do it. Use Version 2.7x. Make sure you have pip as well.
+Make sure you have Python and the requirements installed. If you don't have Python installed, search how to do it. **Use Version 2.7.x**. Make sure you have pip as well.
 
 To install the requirements, open a CMD window in the root folder and run:
 
@@ -45,8 +46,14 @@ If you want to use PTC, change `-a google` to `-a ptc`
 
 ## Screenshots
 
+### Main Menu
+
 ![Main Menu](/media/main_menu.png?raw=true "Main Menu")
 
+### Viewing Pokemon
+
 ![Viewing Pokemon](/media/view_pokemon.png?raw=true "View Pokemon")
+
+### Transferring Pokemon
 
 ![Transferring Pokemon](/media/transfer_pokemon.png?raw=true "Transfer Pokemon")
