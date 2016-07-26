@@ -2,7 +2,7 @@
 
 This was a project that I decided to throw together to fill a niche that hasn't yet been filled. I won't be actively updating this, and there is not much error handling, so **use with care**.
 
-This is essentially just a modified demo of the [Python API for Pokemon Go avaiilable here](https://github.com/rubenvereecken/pokemongo-api), so give them the credit.
+This is essentially just a modified demo of the [Python API for Pokemon Go available here](https://github.com/rubenvereecken/pokemongo-api), so give them the credit.
 
 I just tweaked it to do what I want. Feel free to reuse this without asking. I just wanted something until someone made something better.
 
@@ -23,7 +23,7 @@ It does 2 things:
 
 ## How to run it
 
-Make sure you have Python and the requirements installed. If you don't have Python installed, search how to do it. Use. Version 2.7+. Make sure you have pip as well.
+Make sure you have Python and the requirements installed. If you don't have Python installed, search how to do it. Use Version 2.7x. Make sure you have pip as well.
 
 To install the requirements, open a CMD window in the root folder and run:
 
@@ -39,4 +39,14 @@ Replace the email, password, and coordinates (coordinates can also be a location
 
 Run PokeManager.bat. There should be a menu presented to you. Follow along. Don't try to break it - you will.
 
+If you want to use PTC, change `-a google` to `-a ptc`
+
 **NOTE:** I don't know if this API supports 2FA. If you have 2FA and it gives you Auth errors, set up an [App Password](https://security.google.com/settings/security/apppasswords).
+
+## Screenshots
+
+![Main Menu](/media/main_menu.png?raw=true "Main Menu")
+
+![Viewing Pokemon](/media/view_pokemon.png?raw=true "View Pokemon")
+
+![Transferring Pokemon](/media/transfer_pokemon.png?raw=true "Transfer Pokemon")
