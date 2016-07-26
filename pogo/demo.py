@@ -49,6 +49,8 @@ def massRemove(session):
 	# Show user all the "safe to remove" pokemon
 	refinedMonsters = []
 	print '\n'
+	print ' NAME            | CP    | ATK | DEF | STA | IV% '
+	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in safeParty:
 		if monster[0] == userPokemon:
 			if monster[5] > 74:
@@ -76,6 +78,8 @@ def massRemove(session):
 	print '\n'
 	i = 0
 	monstersToRelease = []
+	print ' NAME            | CP    | ATK | DEF | STA | IV% '
+	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in refinedMonsters:
 		if monster[0] == userPokemon and i < int(userNumber):
 			i = i + 1
@@ -127,6 +131,8 @@ def viewPokemon(session):
 	
 	# Display the pokemon, with color coding for IVs and separation between types of pokemon
 	i = 0
+	print ' NAME            | CP    | ATK | DEF | STA | IV% '
+	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in myParty:
 		if i > 0:
 			if myParty[i][0] != myParty[i-1][0]:
