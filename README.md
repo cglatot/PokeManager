@@ -21,13 +21,15 @@ It does 3 things:
   2.  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
   3.  It will ask how many of the "safe" Pokemon you want to transfer.
   4.  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
+  5.  If specifying certain numbers (lower than the total "safe" Pokemon) it will always transfer the lowest IV% Pokemon first
 3.  Allows you to rename your Pokemon to include their IVs
   1.  Currently it will rename your Pokemon to IV%-ATK/DEF/STA. There is a char limit of 12, so no room for anything else. I chose IV first because you can order by name, thus getting highest IV.
   2.  It allows you to set an IV% limit so it will only rename those Pokemon that are above that limit
 
-## Important info
+## Important Info / Updates
 
 * Pokemon names must be in ALL CAPITALS. It uses the API names (easy to look up)
+* You can now specify ALL to transfer ALL Pokemon below the IV and CP thresholds
 * The release and rename functions will take a long time if there are a lot of pokemon. This is to help reduce bot detection by adding delays to requests
 
 ## How to run it

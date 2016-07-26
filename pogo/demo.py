@@ -44,7 +44,11 @@ def massRemove(session):
 	safeParty = [item for item in myParty if item[5] < safeIV and item[1] < safeCP]
 	
 	# Ask user which pokemon they want. This must be CAPITALS.
-	userPokemon = raw_input("\nWhich pokemon do you want to transfer?: ")
+	userPokemon = raw_input("\nWhich pokemon do you want to transfer? (ALL will transfer everything below the safe zones): ")
+	
+	# If they choose ALL, then sort by IV, not by name
+	if userPokemon == 'ALL':
+		safeParty.sort(key = operator.itemgetter(5))
 	
 	# Show user all the "safe to remove" pokemon
 	refinedMonsters = []
@@ -52,7 +56,7 @@ def massRemove(session):
 	print ' NAME            | CP    | ATK | DEF | STA | IV% '
 	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in safeParty:
-		if monster[0] == userPokemon:
+		if monster[0] == userPokemon or userPokemon == 'ALL':
 			if monster[5] > 74:
 				logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])
 			elif monster[5] > 49:
@@ -66,7 +70,10 @@ def massRemove(session):
 		print "\nCannot safely transfer any Pokemon of this type. IVs or CP are too high."
 		mainMenu(session)
 	
-	logging.info('\nCan safely remove %s of this Pokemon',len(refinedMonsters))
+	if userPokemon == 'ALL':
+		logging.info('\nCan safely remove %s Pokemon',len(refinedMonsters))
+	else:
+		logging.info('\nCan safely remove %s of this Pokemon',len(refinedMonsters))
 	
 	# Ask how many they want to remove
 	userNumber = int(raw_input("How many do you want to remove?: "))
@@ -81,7 +88,7 @@ def massRemove(session):
 	print ' NAME            | CP    | ATK | DEF | STA | IV% '
 	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in refinedMonsters:
-		if monster[0] == userPokemon and i < int(userNumber):
+		if i < int(userNumber):
 			i = i + 1
 			if monster[5] > 74:
 				logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])
@@ -92,10 +99,17 @@ def massRemove(session):
 			monstersToRelease.append(monster)
 	
 	# Double check they are okay to remove
-	if int(userNumber) > len(refinedMonsters):
-		logging.info('\nThis will transfer %s of this Pokemon',len(refinedMonsters))
+	if userPokemon == 'ALL':
+		if int(userNumber) > len(refinedMonsters):
+			logging.info('\nThis will transfer %s Pokemon',len(refinedMonsters))
+		else:
+			logging.info('\nThis will transfer %s Pokemon',userNumber)
 	else:
-		logging.info('\nThis will transfer %s of this Pokemon',userNumber)
+		if int(userNumber) > len(refinedMonsters):
+			logging.info('\nThis will transfer %s of this Pokemon',len(refinedMonsters))
+		else:
+			logging.info('\nThis will transfer %s of this Pokemon',userNumber)
+		
 	okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ')
 	
 	# Remove the pokemon! Use randomness to reduce chance of bot detection
