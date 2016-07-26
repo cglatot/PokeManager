@@ -5,6 +5,7 @@ import time
 import sys
 import operator
 import random
+import getpass
 from collections import Counter
 from custom_exceptions import GeneralPogoException
 
@@ -272,7 +273,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--auth", help="Auth Service", required=True)
     parser.add_argument("-u", "--username", help="Username", required=True)
-    parser.add_argument("-p", "--password", help="Password", required=True)
+    parser.add_argument("-p", "--password", help="Password", required=False)
     parser.add_argument("-l", "--location", help="Location", required=True)
     parser.add_argument("-g", "--geo_key", help="GEO API Secret")
     args = parser.parse_args()
@@ -281,6 +282,10 @@ if __name__ == '__main__':
     if args.auth not in ['ptc', 'google']:
         logging.error('Invalid auth service {}'.format(args.auth))
         sys.exit(-1)
+        
+    # Check password
+    if args.password == None:
+    	args.password = getpass.getpass()
 
     # Create PokoAuthObject
     poko_session = PokeAuthSession(
