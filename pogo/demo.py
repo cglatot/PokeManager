@@ -190,10 +190,19 @@ def viewCounts(session):
 	
 	# Count the number of pokemon, put them in a list, and sort alphabetically
 	countRepeats = Counter(myParty)
-	countList = countRepeats.items()
+	countListTmp = countRepeats.items()
+	countList = []
 	
-	sortBy = int(raw_input('How to sort the list? (1 = Alphabetically, 2 = Total Numbers): '))
-	countList.sort(key = operator.itemgetter(sortBy -1))
+	for entry in countListTmp:
+		item = list(entry)
+		pokedexNum = getattr(pokedex, item[0])
+		item.append(pokedexNum)
+		countList.append(item)
+	
+	# logging.info(countList)
+	
+	sortBy = int(raw_input('How to sort the list? (1 = Alphabetically, 2 = Total Numbers, 3 = Pokedex): '))
+	countList.sort(key = operator.itemgetter(sortBy - 1))
 	
 	# Total number of Pokemon that can be evolved
 	# Number of evolutions per Pokemon
@@ -205,10 +214,12 @@ def viewCounts(session):
 	print '---------------- | ----- | ------- | ------ '
 	for monster in countList:
 		evolutions = ''
+		skipCount = 0
 		pokedexNum = getattr(pokedex, monster[0])
 		try:
 			candies = session.checkInventory().candies[pokedexNum]
 		except:
+			skipCount = 1
 			try:
 				candies = session.checkInventory().candies[pokedexNum - 1]
 			except:
@@ -219,11 +230,11 @@ def viewCounts(session):
 
 		if(pokedex.evolves[pokedexNum]):
 			evolutions = min(monster[1],int((candies-1)/pokedex.evolves[pokedexNum]))
-			if evolutions > 0:
+			if evolutions > 0 and skipCount == 0:
 				countEvolutions += evolutions
 			else:
 				evolutions = ''
-		print ' %-15s | %-5d | %-7d | %s ' % (monster[0], monster[1], candies, evolutions)
+		print ' %-15s | %-5d | %-7d | %s ||| %s' % (monster[0], monster[1], candies, evolutions, countEvolutions)
 	
 	mainMenu(session)
 	
