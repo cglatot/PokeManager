@@ -232,9 +232,11 @@ def viewCounts(session):
 			evolutions = min(monster[1],int((candies-1)/pokedex.evolves[pokedexNum]))
 			if evolutions > 0 and skipCount == 0:
 				countEvolutions += evolutions
-			else:
+			if evolutions == 0:
 				evolutions = ''
-		print ' %-15s | %-5d | %-7d | %s ||| %s' % (monster[0], monster[1], candies, evolutions, countEvolutions)
+		print ' %-15s | %-5d | %-7d | %s ' % (monster[0], monster[1], candies, evolutions)
+	
+	logging.info('\nYou can evolve a total of %s Base Pokemon.', countEvolutions)
 	
 	mainMenu(session)
 	
