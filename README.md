@@ -70,6 +70,10 @@ If you want to use PTC, change `-a google` to `-a ptc`
 
 ![Counting Pokemon](/media/count_pokemon.png?raw=true "Count Pokemon")
 
+### Viewing possible evolutions
+
+![Counting Evolutions](/media/count_evolutions.png?raw=true "Count evolutions")
+
 ### Transferring Pokemon
 
 ![Transferring Pokemon](/media/transfer_pokemon2.png?raw=true "Transfer Pokemon")
