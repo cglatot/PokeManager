@@ -9,6 +9,8 @@ I just tweaked it to do what I want. Feel free to reuse this. I just wanted some
 
 If you have any suggestions, and I like them, I will be happy to look into it - but please don't expect me to be as active as the other developments going on.
 
+**Disclaimer**: This is built using an unofficial API. ***All*** of the unofficial APIs stand a risk of getting you banned. So use with caution!
+
 ## What does it do?
 
 It does 4 things:
