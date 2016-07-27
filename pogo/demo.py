@@ -220,7 +220,9 @@ def viewCounts(session):
 			evolutions = min(monster[1],int((candies-1)/pokedex.evolves[pokedexNum]))
 			if evolutions > 0:
 				countEvolutions += evolutions
-		print ' %-15s | %-5d | %-7d | %d ' % (monster[0], monster[1], candies, evolutions)
+			else:
+				evolutions = ''
+		print ' %-15s | %-5d | %-7d | %s ' % (monster[0], monster[1], candies, evolutions)
 	
 	mainMenu(session)
 	
@@ -246,11 +248,11 @@ def viewPokemon(session):
 			if myParty[i][0] != myParty[i-1][0]:
 				print '---------------- | ----- | --- | --- | --- | ----'
 		if monster[5] > 74:
-			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])#,monster[7],monster[8])
+			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])#,monster[7],monster[8])
 		elif monster[5] > 49:
-			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])#,monster[7],monster[8])
+			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])#,monster[7],monster[8])
 		else:
-			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])#,monster[7],monster[8])
+			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])#,monster[7],monster[8])
 		i = i+1
 
 	mainMenu(session)
