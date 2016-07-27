@@ -271,7 +271,7 @@ def countEvolutions(session):
                     evolutions = min(monster[1],int((candies-1)/pokedex.evolves[pokedexNum]))
                     if evolutions > 0:
                             countEvolutions += evolutions
-                            print ' %-15s | %-5d | %-7d | %d | %d' % (monster[0], monster[1], candies, evolutions, countEvolutions)
+                            print ' %-15s | %-5d | %-7d | %d' % (monster[0], monster[1], candies, evolutions)
         print 'You can evolve %d Pokemon in total.' % countEvolutions
 	
 	mainMenu(session)
