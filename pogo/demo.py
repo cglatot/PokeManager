@@ -45,7 +45,7 @@ def massRemove(session):
 	safeParty = [item for item in myParty if item[5] < safeIV and item[1] < safeCP]
 	
 	# Ask user which pokemon they want. This must be CAPITALS.
-	userPokemon = raw_input("\nWhich pokemon do you want to transfer? (ALL will transfer everything below the safe zones): ")
+	userPokemon = raw_input("\nWhich pokemon do you want to transfer? (ALL will transfer everything below the safe zones): ").upper()
 	
 	# If they choose ALL, then sort by IV, not by name
 	if userPokemon == 'ALL':
@@ -111,7 +111,7 @@ def massRemove(session):
 		else:
 			logging.info('\nThis will transfer %s of this Pokemon',userNumber)
 		
-	okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ')
+	okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ').lower()
 	
 	# Remove the pokemon! Use randomness to reduce chance of bot detection
 	outlier = random.randint(8,12)
@@ -160,7 +160,7 @@ def massRename(session):
 	
 	# Show how many it will rename and if they want to continue
 	logging.info('\nThis will rename %s Pokemon.',len(refinedParty))
-	okayToProceed = raw_input('Do you want to rename these Pokemon? (y/n): ')
+	okayToProceed = raw_input('Do you want to rename these Pokemon? (y/n): ').lower()
 	
 	# Rename the pokemon! Use randomness to reduce chance of bot detection
 	outlier = random.randint(8,12)
