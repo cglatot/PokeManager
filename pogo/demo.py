@@ -154,7 +154,7 @@ def massRename(session):
 	print '---------------- | ----- | --- | --- | --- | ----'
 	refinedParty = []
 	for monster in myParty:
-		if monster[5] > userThreshold:# and monster[6].nickname == '':
+		if monster[5] > userThreshold and monster[6].nickname != str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]):
 			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].nickname)
 			refinedParty.append(monster)
 	
