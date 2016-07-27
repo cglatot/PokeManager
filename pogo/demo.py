@@ -5,7 +5,6 @@ import time
 import sys
 import operator
 import random
-import getpass
 from collections import Counter
 from custom_exceptions import GeneralPogoException
 
@@ -244,6 +243,38 @@ def viewPokemon(session):
 		i = i+1
 
 	mainMenu(session)
+
+def countEvolutions(session):
+        party = session.checkInventory().party
+	myParty = []
+	
+	# Get the party and put it into a nicer list
+	for pokemon in party:
+		L = pokedex[pokemon.pokemon_id]
+		myParty.append(L)
+	
+	# Count the number of pokemon, put them in a list, and sort alphabetically
+	countRepeats = Counter(myParty)
+	countList = countRepeats.items()
+
+        # Print the list of pokemon in a nicer format
+	print '\n NAME            | COUNT | CANDIES | EVOLUTIONS '
+	print   '---------------- | ----- | ------- | -----------'
+	countEvolutions = 0
+	for monster in countList:
+		pokedexNum = getattr(pokedex, monster[0])
+		try:
+			candies = session.checkInventory().candies[pokedexNum]
+		except:
+                        candies = 0
+		if(pokedex.evolves[pokedexNum]):
+                    evolutions = min(monster[1],int((candies-1)/pokedex.evolves[pokedexNum]))
+                    if evolutions > 0:
+                            countEvolutions += evolutions
+                            print ' %-15s | %-5d | %-7d | %d | %d' % (monster[0], monster[1], candies, evolutions, countEvolutions)
+        print 'You can evolve %d Pokemon in total.' % countEvolutions
+	
+	mainMenu(session)
 	
 def mainMenu(session):
 	print '\n\n  MAIN MENU'
@@ -252,14 +283,16 @@ def mainMenu(session):
 	print '  2: View Counts'
 	print '  3: Transfer Pokemon'
 	print '  4: Rename Pokemon'
-	print '  5: Exit'
+	print '  5: Count Evolutions'
+	print '  6: Exit'
 	
 	menuChoice = int(raw_input("\nEnter choice: "))
 	if menuChoice == 1: viewPokemon(session)
 	elif menuChoice == 2: viewCounts(session)
 	elif menuChoice == 3: massRemove(session)
 	elif menuChoice == 4: massRename(session)
-	elif menuChoice == 5: quit()
+	elif menuChoice == 5: countEvolutions(session)
+	elif menuChoice == 6: quit()
 	else: quit()
 		
 		
@@ -273,7 +306,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-a", "--auth", help="Auth Service", required=True)
     parser.add_argument("-u", "--username", help="Username", required=True)
-    parser.add_argument("-p", "--password", help="Password", required=False)
+    parser.add_argument("-p", "--password", help="Password", required=True)
     parser.add_argument("-l", "--location", help="Location", required=True)
     parser.add_argument("-g", "--geo_key", help="GEO API Secret")
     args = parser.parse_args()
@@ -282,10 +315,6 @@ if __name__ == '__main__':
     if args.auth not in ['ptc', 'google']:
         logging.error('Invalid auth service {}'.format(args.auth))
         sys.exit(-1)
-        
-    # Check password
-    if args.password == None:
-    	args.password = getpass.getpass()
 
     # Create PokoAuthObject
     poko_session = PokeAuthSession(
