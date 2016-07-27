@@ -204,6 +204,7 @@ def viewCounts(session):
 	print '\n NAME            | COUNT | CANDIES | EVOLVE '
 	print '---------------- | ----- | ------- | ------ '
 	for monster in countList:
+		evolutions = ''
 		pokedexNum = getattr(pokedex, monster[0])
 		try:
 			candies = session.checkInventory().candies[pokedexNum]
