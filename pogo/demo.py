@@ -281,17 +281,17 @@ def mainMenu(session):
 	print '  ---------'
 	print '  1: View Pokemon'
 	print '  2: View Counts'
-	print '  3: Transfer Pokemon'
-	print '  4: Rename Pokemon'
-	print '  5: Count Evolutions'
+	print '  3: Count Evolutions'
+	print '  4: Transfer Pokemon'
+	print '  5: Rename Pokemon'
 	print '  6: Exit'
 	
 	menuChoice = int(raw_input("\nEnter choice: "))
 	if menuChoice == 1: viewPokemon(session)
 	elif menuChoice == 2: viewCounts(session)
-	elif menuChoice == 3: massRemove(session)
-	elif menuChoice == 4: massRename(session)
-	elif menuChoice == 5: countEvolutions(session)
+	elif menuChoice == 3: countEvolutions(session)
+	elif menuChoice == 4: massRemove(session)
+	elif menuChoice == 5: massRename(session)
 	elif menuChoice == 6: quit()
 	else: quit()
 		
