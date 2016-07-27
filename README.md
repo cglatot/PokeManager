@@ -15,7 +15,7 @@ If you have any suggestions, and I like them, I will be happy to look into it - 
 
 It does 4 things:
 
-1.  Allows you to view all your Pokemon and their states (CP and IVs)
+1.  Allows you to view all your Pokemon and their stats (CP and IVs)
   1.  It also groups / sorts alphabetically, and then by IV%
   2.  It also colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
 2.  Allows you to view how many of each Pokemon you have, as well as how many candies you have for that Pokemon
@@ -67,7 +67,7 @@ If you want to use PTC, change `-a google` to `-a ptc`
 
 ### Viewing Pokemon
 
-![Viewing Pokemon](/media/view_pokemon.png?raw=true "View Pokemon")
+![Viewing Pokemon](/media/view_pokemon2.png?raw=true "View Pokemon")
 
 ### Viewing Totals of Pokemon
 
