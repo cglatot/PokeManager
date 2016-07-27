@@ -17,6 +17,8 @@ It does 4 things:
   1.  It also groups / sorts alphabetically, and then by IV%
   2.  It also colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
 2.  Allows you to view how many of each Pokemon you have, as well as how many candies you have for that Pokemon
+  1.  It also shows how many you can evolve
+  2.  At the bottom of the list it will show you how many "base" Pokemon you can evolve. That is, those Pokemon that are tier 1 evolves only.
 3.  Allows you to mass transfer Pokemon
   1.  You can set "safe" limits of IV% and CP. This will not transfer anything that is above either of those levels.
   2.  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
@@ -67,7 +69,7 @@ If you want to use PTC, change `-a google` to `-a ptc`
 
 ### Viewing Totals of Pokemon
 
-![Counting Pokemon](/media/count_pokemon.png?raw=true "Count Pokemon")
+![Counting Pokemon](/media/count_pokemon2.png?raw=true "Count Pokemon")
 
 ### Transferring Pokemon
 
