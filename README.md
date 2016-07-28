@@ -38,7 +38,7 @@ It does 4 things:
 * The release and rename functions will take a long time if there are a lot of pokemon. This is to help reduce bot detection by adding delays to requests
 
 ## How to run it
-
+### Locally, with python
 Make sure you have Python and the requirements installed. If you don't have Python installed, search how to do it. **Use Version 2.7.x**. Make sure you have pip as well.
 
 To install the requirements, open a CMD window in the root folder and run:
@@ -55,7 +55,21 @@ Replace the email, password, and coordinates (coordinates can also be a location
 
 Run PokeManager.bat. There should be a menu presented to you. Follow along. Don't try to break it - you will.
 
-If you want to use PTC, change `-a google` to `-a ptc`
+If you want to use PTC, change `-a google` to `-a ptc`  
+
+### Using Docker
+If you have docker installed, you can build this locally using the supplied Dockerfile: 
+
+```docker build .```
+
+Then you can run the image that was just built: 
+
+```docker run --rm -it -e "AUTHTYPE=google" -e "LOGIN=yourlogin@gmail.com" -e "PASSWORD=your-password" -e "STARTINGPOINT=lat, long"  <the image ID that was just made>```
+	
+or to use a pre-built docker image: 
+        
+#### Pre-built image: 
+```docker run --rm -it -e "AUTHTYPE=google" -e "LOGIN=yourlogin@gmail.com" -e "PASSWORD=your-password" -e "STARTINGPOINT=lat, long" ryebrye/pokemongo-manager:latest```
 
 **NOTE:** I don't know if this API supports 2FA. If you have 2FA and it gives you Auth errors, set up an [App Password](https://security.google.com/settings/security/apppasswords).
 
