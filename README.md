@@ -1,13 +1,12 @@
 # Pokemon Manager for Pokemon Go
 
-This was a project that I decided to throw together to fill a niche that hasn't yet been filled. I won't be actively updating this, and there is not much error handling, so **use with care**.
+This tool is a CLI tool that uses the [Python API for Pokemon Go available here](https://github.com/rubenvereecken/pokemongo-api), so give them the credit for making this possible.
+Also, anything that will work for that API will work here as well.
 
-This is essentially just a modified demo of the [Python API for Pokemon Go available here](https://github.com/rubenvereecken/pokemongo-api), so give them the credit. Also, anything that will
-work for that API will work here as well.
-
-I just tweaked it to do what I want. Feel free to reuse this. I just wanted something until someone made something better.
+Feel free to fork this and submit merge requests - I will review them and merge them if they fit with my vision for this tool.
 
 If you have any suggestions, and I like them, I will be happy to look into it - but please don't expect me to be as active as the other developments going on.
+Submit an issue with **[Feature]** at the beginning if you would like to make a suggestion.
 
 **Disclaimer**: This is built using an unofficial API. ***All*** of the unofficial APIs stand a risk of getting you banned. So use with caution!
 
@@ -15,9 +14,9 @@ If you have any suggestions, and I like them, I will be happy to look into it - 
 
 It does 4 things:
 
-1.  Allows you to view all your Pokemon and their stats (CP and IVs)
-  1.  It also groups / sorts alphabetically, and then by IV%
-  2.  It also colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
+1.  Allows you to view all your Pokemon and their stats (CP, IVs, and Moves)
+  1.  It groups / sorts alphabetically, and then by IV%
+  2.  It colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
 2.  Allows you to view how many of each Pokemon you have, as well as how many candies you have for that Pokemon
   1.  It also shows how many you can evolve
   2.  At the bottom of the list it will show you how many "base" Pokemon you can evolve. That is, those Pokemon that are tier 1 evolves only.
@@ -34,8 +33,9 @@ It does 4 things:
 ## Important Info / Updates
 
 * Pokemon names must be in ALL CAPITALS. It uses the API names (easy to look up)
-* You can now specify ALL to transfer ALL Pokemon below the IV and CP thresholds
+* You can specify **ALL** to transfer all Pokemon below the IV and CP thresholds
 * The release and rename functions will take a long time if there are a lot of pokemon. This is to help reduce bot detection by adding delays to requests
+* If you have 2FA and it gives you Auth errors, set up an [App Password](https://security.google.com/settings/security/apppasswords).
 
 ## How to run it
 ### Locally, with python
@@ -70,8 +70,6 @@ or to use a pre-built docker image:
         
 #### Pre-built image: 
 ```docker run --rm -it -e "AUTHTYPE=google" -e "LOGIN=yourlogin@gmail.com" -e "PASSWORD=your-password" -e "STARTINGPOINT=lat, long" ryebrye/pokemongo-manager:latest```
-
-**NOTE:** I don't know if this API supports 2FA. If you have 2FA and it gives you Auth errors, set up an [App Password](https://security.google.com/settings/security/apppasswords).
 
 ## Screenshots
 
