@@ -35,6 +35,7 @@ It does 4 things:
 * Pokemon names must be in ALL CAPITALS. It uses the API names (easy to look up)
 * You can specify **ALL** to transfer all Pokemon below the IV and CP thresholds
 * The release and rename functions will take a long time if there are a lot of pokemon. This is to help reduce bot detection by adding delays to requests
+* You can now export the View and Counts to CSV files. They will be in the same directory as the .bat file (or from whichever directory you run the python command)
 * If you have 2FA and it gives you Auth errors, set up an [App Password](https://security.google.com/settings/security/apppasswords).
 
 ## How to run it

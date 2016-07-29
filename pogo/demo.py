@@ -205,12 +205,20 @@ def viewCounts(session):
 	sortBy = int(raw_input('How to sort the list? (1 = Alphabetically, 2 = Total Numbers, 3 = Pokedex): '))
 	countList.sort(key = operator.itemgetter(sortBy - 1))
 	
+	# Ask if they want to save to CSV
+	saveCSV = raw_input('Do you want to export to CSV file? (y/n): ').lower()
+	if saveCSV == 'y':
+		f = open('My_Pokemon_Counts.csv', 'w')
+	
 	# Total number of Pokemon that can be evolved
 	# Number of evolutions per Pokemon
 	countEvolutions = 0
 	evolutions = 0
 	
 	# Print the list of pokemon in a nicer format
+	if saveCSV == 'y':
+		f.write('NAME,COUNT,CANDIES,EVOLVE\n')
+		
 	print '\n NAME            | COUNT | CANDIES | EVOLVE '
 	print '---------------- | ----- | ------- | ------ '
 	for monster in countList:
@@ -236,8 +244,16 @@ def viewCounts(session):
 			if evolutions == 0:
 				evolutions = ''
 		print ' %-15s | %-5d | %-7d | %s ' % (monster[0], monster[1], candies, evolutions)
+		# Write to the CSV
+		if saveCSV == 'y':
+			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(candies) + ',' + str(evolutions) + '\n')
 	
 	logging.info('\nYou can evolve a total of %s Base Pokemon.', countEvolutions)
+	
+	# Close the CSV
+	if saveCSV == 'y':
+		logging.info('Saved to My_Pokemon_Counts.csv')
+		f.close()
 	
 	mainMenu(session)
 	
@@ -258,11 +274,23 @@ def viewPokemon(session):
 	# Sort party by name and then IV percentage	
 	myParty.sort(key = operator.itemgetter(0, 5))
 	
+	# Ask if they want to save to CSV
+	saveCSV = raw_input('Do you want to export to CSV file? (y/n): ').lower()
+	if saveCSV == 'y':
+		f = open('My_Pokemon.csv', 'w')
+	
 	# Display the pokemon, with color coding for IVs and separation between types of pokemon
 	i = 0
+	# Write headings to the CSV
+	if saveCSV == 'y':
+		f.write('NAME,CP,ATK,DEF,STA,IV%,MOVE 1,MOVE 2\n')
+		
 	print '\n NAME            | CP    | ATK | DEF | STA | IV% | MOVE 1          | MOVE 2          '
 	print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
 	for monster in myParty:
+		# Write to the CSV
+		if saveCSV == 'y':
+			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(monster[2]) + ',' + str(monster[3]) + ',' + str(monster[4]) + ',' + str(monster[5]) + ',' + monster[7] + ',' + monster[8] + '\n')
 		if i > 0:
 			if myParty[i][0] != myParty[i-1][0]:
 				print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
@@ -273,6 +301,11 @@ def viewPokemon(session):
 		else:
 			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
 		i = i+1
+	
+	# Close the CSV
+	if saveCSV == 'y':
+		logging.info('\nSaved to My_Pokemon.csv')
+		f.close()
 
 	mainMenu(session)
 	
