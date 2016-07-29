@@ -19,23 +19,25 @@ It does 4 things:
   2.  It colour codes based on the IV% (Green for >75, Yellow for >50, White for the rest)
 2.  Allows you to view how many of each Pokemon you have, as well as how many candies you have for that Pokemon
   1.  It also shows how many you can evolve
-  2.  At the bottom of the list it will show you how many "base" Pokemon you can evolve. That is, those Pokemon that are tier 1 evolves only.
+  2.  At the bottom of the list it will show you how many "base" Pokemon you can evolve. That is, those Pokemon that are tier 1 evolves only
 3.  Allows you to mass transfer Pokemon
-  1.  You can set "safe" limits of IV% and CP. This will not transfer anything that is above either of those levels.
-  2.  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
-  3.  It will ask how many of the "safe" Pokemon you want to transfer.
-  4.  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
-  5.  If specifying certain numbers (lower than the total "safe" Pokemon) it will always transfer the lowest IV% Pokemon first
+  1.  You can set "safe" limits of IV% and CP. This will not transfer anything that is above either of those levels
+  2.  **You can set up an exception list of Pokemon to *never* transfer. Look for *exceptions.config* in the root folder. 1 Pokemon per line**
+  3.  It will show you how many of that Pokemon is "safe" to transfer, along with their stats
+  4.  It will ask how many of the "safe" Pokemon you want to transfer.
+  5.  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
+  6.  If specifying certain numbers (lower than the total "safe" Pokemon) it will always transfer the lowest IV% Pokemon first
 4.  Allows you to rename your Pokemon to include their IVs
   1.  Currently it will rename your Pokemon to IV%-ATK/DEF/STA. There is a char limit of 12, so no room for anything else. I chose IV first because you can order by name, thus getting highest IV.
   2.  It allows you to set an IV% limit so it will only rename those Pokemon that are above that limit
 
 ## Important Info / Updates
 
+* **Make sure you configure *exceptions.config* in the root folder with the bat file. Pokemon listed here will *never* be transferred. 1 Pokemon name per line.**
+* **You can now export the View and Counts to CSV files. They will be in the same directory as the .bat file (or from whichever directory you run the python command)**
 * Pokemon names must be in ALL CAPITALS. It uses the API names (easy to look up)
 * You can specify **ALL** to transfer all Pokemon below the IV and CP thresholds
 * The release and rename functions will take a long time if there are a lot of pokemon. This is to help reduce bot detection by adding delays to requests
-* You can now export the View and Counts to CSV files. They will be in the same directory as the .bat file (or from whichever directory you run the python command)
 * If you have 2FA and it gives you Auth errors, set up an [App Password](https://security.google.com/settings/security/apppasswords).
 
 ## How to run it

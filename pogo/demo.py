@@ -6,6 +6,7 @@ import sys
 import operator
 import random
 import getpass
+import os.path
 
 import POGOProtos.Enums.PokemonMove_pb2 as PokemonMove_pb2
 
@@ -29,6 +30,11 @@ def setupLogger():
 def massRemove(session):
 	party = session.checkInventory().party
 	myParty = []
+	
+	# Open the config file to create the exception list to NEVER transfer Pokemon
+	rf = open(os.path.dirname(__file__) + '/../exceptions.config')
+	exceptionList = rf.read().splitlines()
+	rf.close()
 	
 	# Get the stats for all the pokemon in the party. Easier to store and nicer to display.
 	for pokemon in party:
@@ -58,7 +64,7 @@ def massRemove(session):
 	print ' NAME            | CP    | ATK | DEF | STA | IV% '
 	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in safeParty:
-		if monster[0] == userPokemon or userPokemon == 'ALL':
+		if monster[0] == userPokemon or userPokemon == 'ALL' and monster[0] not in exceptionList:
 			if monster[5] > 74:
 				logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])
 			elif monster[5] > 49:
@@ -366,7 +372,7 @@ if __name__ == '__main__':
 
     # Time to show off what we can do
     if session:
-	
+
 		mainMenu(session)
 
     else:
