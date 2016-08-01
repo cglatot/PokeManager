@@ -191,16 +191,24 @@ def massRemoveNonUnique(session):
 	time.sleep(0.1)
 	print '\n\n'
 	# Start removing the pokemon
-	outlier = 1
-	for index, pokemon in enumerate(trade_pokemon):
-		t = random.uniform(5.0, 7.0)
-		if index % outlier == 0:
-			outlier = random.randint(8, 12)
-			if index > 0:
-				t *= 3
-		print "Removed '%s'" % (pokedex[pokemon.pokemon_id].capitalize())
-		result = session.releasePokemon(pokemon)
-		time.sleep(t)
+	if not len(trade_pokemon):
+		logging.info("No Pokemon to be removed.")
+	else:
+		okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ').lower()
+
+		if okayToProceed == 'y':
+			outlier = 1
+			for index, pokemon in enumerate(trade_pokemon):
+				t = random.uniform(5.0, 7.0)
+				if index % outlier == 0:
+					outlier = random.randint(8, 12)
+					if index > 0:
+						t *= 3
+				print "Removed '%s'" % (pokedex[pokemon.pokemon_id].capitalize())
+				result = session.releasePokemon(pokemon)
+				time.sleep(t)
+		else:
+			logging.info('Aborting to mass trade of pokemon.')
 
 	mainMenu(session)
 
