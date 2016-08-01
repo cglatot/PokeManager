@@ -16,6 +16,10 @@ from POGOProtos.Networking.Requests.Messages import DownloadSettingsMessage_pb2
 from POGOProtos.Networking.Requests.Messages import UseItemEggIncubatorMessage_pb2
 from POGOProtos.Networking.Requests.Messages import RecycleInventoryItemMessage_pb2
 from POGOProtos.Networking.Requests.Messages import NicknamePokemonMessage_pb2
+from POGOProtos.Networking.Requests.Messages import UseItemPotionMessage_pb2
+from POGOProtos.Networking.Requests.Messages import UseItemReviveMessage_pb2
+from POGOProtos.Networking.Requests.Messages import SetPlayerTeamMessage_pb2
+from POGOProtos.Networking.Requests.Messages import SetFavoritePokemonMessage_pb2
 
 # Load local
 import api
@@ -393,6 +397,48 @@ class PogoSession(object):
         # Return everything
         return self._state.itemCapture
 
+    # Use a Potion
+    def useItemPotion(self, item_id, pokemon):
+
+        # Create Request
+        payload = [Request_pb2.Request(
+            request_type = RequestType_pb2.USEITEMPOTIONMESSAGE,
+            request_message = UseItemPotionMessage_pb2.UseItemPotionMessage(
+                item_id = item_id,
+                pokemon_id = pokemon.id
+            ).SerializeToString()
+        )]
+
+        # Send
+        res = self.wrapAndRequest(payload, defaults=False)
+
+        # Parse
+        self._state.itemPotion.ParseFromString(res.returns[0])
+
+        # Return everything
+        return self._state.itemPotion
+
+    # Use a Revive
+    def useItemRevive(self, item_id,pokemon):
+
+        # Create request
+        payload = [Request_pb2.Request(
+            request_type = RequestType_pb2.USEITEMREVIVEMESSAGE,
+            request_message = UseItemReviveMessage_pb2.UseItemReviveMessage(
+                item_id = item_id,
+                pokemon_id = pokemon.id
+            ).SerializeToString()
+        )]
+
+        # Send
+        res = self.wrapAndRequest(payload, defaults=False)
+
+        # Parse
+        self._state.itemRevive.ParseFromString(res.returns[0])
+
+        # Return everything
+        return self._state.itemRevive
+
     # Evolve Pokemon
     def evolvePokemon(self, pokemon):
 
@@ -493,6 +539,47 @@ class PogoSession(object):
 
         # Return everything
         return self._state.nickname
+
+    # Set Pokemon as favorite
+    def setFavoritePokemon(self, pokemon, is_favorite):
+
+        # Create Request
+        payload = [Request_pb2.Request(
+            request_type = RequestType_pb2.SETFAVORITEPOKEMONMESSAGE,
+            request_message = SetFavoritePokemonMessage_pb2.SetFavoritePokemonMessage(
+                pokemon_id = pokemon.id,
+                is_favorite = is_favorite
+            ).SerializeToString()
+        )]
+
+        # Send
+        res = self.wrapAndRequest(payload, defaults=False)
+
+        # Parse
+        self._state.favoritePokemon.ParseFromString(res.returns[0])
+
+        # Return Everything
+        return self._state.favoritePokemon
+
+    # Choose player's team: "BLUE","RED", or "YELLOW".
+    def setPlayerTeam(self, team):
+
+        # Create request
+        payload = [Request_pb2.Request(
+            request_type = RequestType_pb2.SETPLAYERTEAMMESSAGE,
+            request_message = SetPlayerTeamMessage_pb2.SetPlayerTeamMessage(
+                team = team
+            ).SerializeToString()
+        )]
+
+        # Send
+        res = self.wrapAndRequest(payload, defaults=False)
+
+        # Parse
+        self._state.playerTeam.ParseFromString(res.returns[0])
+
+        # Return everything
+        return self._state.playerTeam
 
     # These act as more logical functions.
     # Might be better to break out seperately
