@@ -186,11 +186,13 @@ def massRemoveNonUnique(session):
 						 color, pokedex[pokemon.pokemon_id], pokemon.cp, pokemon.individual_attack,
 						 pokemon.individual_defense, pokemon.individual_stamina, iv_percent)
 	time.sleep(0.1)
-	print '\n'
+
 	# Start removing the pokemon
 	if not len(trade_pokemon):
-		logging.info("No Pokemon to be removed.")
+		logging.info("\nNo Pokemon to be removed.")
 	else:
+		logging.info('\nCan safely remove %s Pokemon',len(trade_pokemon))
+
 		okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ').lower()
 
 		if okayToProceed == 'y':
