@@ -140,6 +140,79 @@ def massRemove(session):
 	# Go back to the main menu
 	mainMenu(session)
 	
+
+
+def massRemoveNonUnique(session):
+	party = session.checkInventory().party
+	pokemon_party = {}
+
+	iv_minimum = int(raw_input('\nWhat is your IV cut off? (Pokemon above this will be safe from transfer): '))
+
+	# Build the party into a dictionary
+	for p in party:
+		iv_percent = ((p.individual_attack + p.individual_defense + p.individual_stamina) * 100) / 45
+		pokemon_name = pokedex[p.pokemon_id]
+		if pokemon_name not in pokemon_party:
+			pokemon_party[pokemon_name] = []
+
+		pokemon_party[pokemon_name].append((iv_percent, p))
+
+	# Start printing the pokemon to remove
+	print '\n'
+	print 'Removing the following pokemon...\n'
+	print ' NAME            | CP    | ATK | DEF | STA | IV% '
+	print '---------------- | ----- | --- | --- | --- | ----'
+
+	trade_pokemon = []
+	for k, pokemons in pokemon_party.iteritems():
+		if len(pokemons) <= 1:
+			continue
+
+		# Sort Pokemon by Highest IV first
+		pokemons.sort(key=operator.itemgetter(0), reverse=True)
+
+		for index, (iv_percent, pokemon) in enumerate(pokemons):
+			if index == 0 or pokemon.favorite:
+				continue
+
+			if iv_percent >= iv_minimum:
+				continue
+
+			trade_pokemon.append(pokemon)
+			color = 37
+			if iv_percent > 74:
+				color = 32
+			elif iv_percent > 49:
+				color = 33
+
+			logging.info('\033[1;%d;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',
+						 color, pokedex[pokemon.pokemon_id], pokemon.cp, pokemon.individual_attack,
+						 pokemon.individual_defense, pokemon.individual_stamina, iv_percent)
+	time.sleep(0.1)
+	print '\n\n'
+	# Start removing the pokemon
+	if not len(trade_pokemon):
+		logging.info("No Pokemon to be removed.")
+	else:
+		okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ').lower()
+
+		if okayToProceed == 'y':
+			outlier = 1
+			for index, pokemon in enumerate(trade_pokemon):
+				t = random.uniform(5.0, 7.0)
+				if index % outlier == 0:
+					outlier = random.randint(8, 12)
+					if index > 0:
+						t *= 3
+				print "Removed '%s'" % (pokedex[pokemon.pokemon_id].capitalize())
+				result = session.releasePokemon(pokemon)
+				time.sleep(t)
+		else:
+			logging.info('Aborting to mass trade of pokemon.')
+
+	mainMenu(session)
+
+
 def massRename(session):
 	party = session.checkInventory().party
 	myParty = []
@@ -321,15 +394,17 @@ def mainMenu(session):
 	print '  1: View Pokemon'
 	print '  2: View Counts'
 	print '  3: Transfer Pokemon'
-	print '  4: Rename Pokemon'
-	print '  5: Exit'
-	
+	print '  4: Transfer Non-Unique Pokemon'
+	print '  5: Rename Pokemon'
+	print '  6: Exit'
+
 	menuChoice = int(raw_input("\nEnter choice: "))
 	if menuChoice == 1: viewPokemon(session)
 	elif menuChoice == 2: viewCounts(session)
 	elif menuChoice == 3: massRemove(session)
-	elif menuChoice == 4: massRename(session)
-	elif menuChoice == 5: quit()
+	elif menuChoice == 4: massRemoveNonUnique(session)
+	elif menuChoice == 5: massRename(session)
+	elif menuChoice == 6: quit()
 	else: quit()
 		
 		
