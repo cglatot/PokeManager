@@ -53,7 +53,7 @@ If this gives you an error about not finding pip, please search how to install P
 
 In the root directory there is a file called **PokeManager.bat**. Open it with your favourite editor and you should see this:
 
-```python ".\pogo\demo.py" -a google -u "user@gmail.com" -p "password" -l "lat, long"```
+```python ".\pogo\demo.py" -a google -u "user@gmail.com" -p "password"```
 
 Replace the email, password, and coordinates (coordinates can also be a location that Google recognises)
 

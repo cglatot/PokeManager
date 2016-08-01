@@ -1,1 +1,1 @@
-python ".\pogo\demo.py" -a google -u "user@domain.com" -p "password" -l "lat, long"
+python ".\pogo\demo.py" -a google -u "user@domain.com" -p "password"

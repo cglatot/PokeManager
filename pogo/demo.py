@@ -416,7 +416,7 @@ if __name__ == '__main__':
     parser.add_argument("-a", "--auth", help="Auth Service", required=True)
     parser.add_argument("-u", "--username", help="Username", required=True)
     parser.add_argument("-p", "--password", help="Password", required=False)
-    parser.add_argument("-l", "--location", help="Location", required=True)
+    parser.add_argument("-l", "--location", help="Location", required=False)
     parser.add_argument("-g", "--geo_key", help="GEO API Secret")
     args = parser.parse_args()
 
@@ -440,12 +440,13 @@ if __name__ == '__main__':
     # Authenticate with a given location
     # Location is not inherent in authentication
     # But is important to session
-    session = poko_session.authenticate(args.location)
+    if args.location != '':
+        session = poko_session.authenticate(args.location)
+    else:
+        session = poko_session.authenticate()
 
     # Time to show off what we can do
     if session:
-
 		mainMenu(session)
-
     else:
         logging.critical('Session not created successfully')
