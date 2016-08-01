@@ -140,8 +140,6 @@ def massRemove(session):
 	# Go back to the main menu
 	mainMenu(session)
 	
-
-
 def massRemoveNonUnique(session):
 	party = session.checkInventory().party
 	pokemon_party = {}
@@ -158,7 +156,6 @@ def massRemoveNonUnique(session):
 		pokemon_party[pokemon_name].append((iv_percent, p))
 
 	# Start printing the pokemon to remove
-	print '\n'
 	print 'Removing the following pokemon...\n'
 	print ' NAME            | CP    | ATK | DEF | STA | IV% '
 	print '---------------- | ----- | --- | --- | --- | ----'
@@ -189,7 +186,7 @@ def massRemoveNonUnique(session):
 						 color, pokedex[pokemon.pokemon_id], pokemon.cp, pokemon.individual_attack,
 						 pokemon.individual_defense, pokemon.individual_stamina, iv_percent)
 	time.sleep(0.1)
-	print '\n\n'
+	print '\n'
 	# Start removing the pokemon
 	if not len(trade_pokemon):
 		logging.info("No Pokemon to be removed.")
@@ -394,7 +391,7 @@ def mainMenu(session):
 	print '  1: View Pokemon'
 	print '  2: View Counts'
 	print '  3: Transfer Pokemon'
-	print '  4: Transfer Non-Unique Pokemon'
+	print '  4: Transfer Duplicate Pokemon'
 	print '  5: Rename Pokemon'
 	print '  6: Exit'
 

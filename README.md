@@ -27,6 +27,7 @@ It does 4 things:
   4.  It will ask how many of the "safe" Pokemon you want to transfer.
   5.  It then shows you the pokemon that will be transferred, and their stats. And asks to confirm if you want to transfer them.
   6.  If specifying certain numbers (lower than the total "safe" Pokemon) it will always transfer the lowest IV% Pokemon first
+  7.  You can also choose to transfer duplicate Pokemon. This will keep the most powerful of each type of Pokemon, and transfer the rest (Can also set IV% cutoff)
 4.  Allows you to rename your Pokemon to include their IVs
   1.  Currently it will rename your Pokemon to IV%-ATK/DEF/STA. There is a char limit of 12, so no room for anything else. I chose IV first because you can order by name, thus getting highest IV.
   2.  It allows you to set an IV% limit so it will only rename those Pokemon that are above that limit
@@ -78,7 +79,7 @@ or to use a pre-built docker image:
 
 ### Main Menu
 
-![Main Menu](/media/main_menu2.png?raw=true "Main Menu")
+![Main Menu](/media/main_menu3.png?raw=true "Main Menu")
 
 ### Viewing Pokemon
 
