@@ -146,10 +146,17 @@ def massRemoveNonUnique(session):
 
 	iv_minimum = int(raw_input('\nWhat is your IV cut off? (Pokemon above this will be safe from transfer): '))
 
+	rf = open(os.path.dirname(__file__) + '/../exceptions.config')
+	except_pokemon = rf.read().splitlines()
+	rf.close()
+
 	# Build the party into a dictionary
 	for p in party:
 		iv_percent = ((p.individual_attack + p.individual_defense + p.individual_stamina) * 100) / 45
 		pokemon_name = pokedex[p.pokemon_id]
+		if pokemon_name in except_pokemon:
+			continue
+
 		if pokemon_name not in pokemon_party:
 			pokemon_party[pokemon_name] = []
 
