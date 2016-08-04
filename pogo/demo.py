@@ -38,6 +38,8 @@ def massRemove(session):
 	
 	# Get the stats for all the pokemon in the party. Easier to store and nicer to display.
 	for pokemon in party:
+		if pokemon.favorite:
+			continue
 		IvPercent = ((pokemon.individual_attack + pokemon.individual_defense + pokemon.individual_stamina)*100)/45
 		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon]
 		myParty.append(L)
