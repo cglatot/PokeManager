@@ -287,13 +287,14 @@ def massFavorite(session):
 	userThreshold = int(raw_input('Enter an IV% threshold to set Pokemon as favorite (0 will set all as favorite): '))
 	
 	# Refine a party with the IV threshold
-	print '\n NAME            | CP    | ATK | DEF | STA | IV% '
-	print '---------------- | ----- | --- | --- | --- | ----'
+	print '\n NAME            | CP    | ATK | DEF | STA | IV% | Fav |'
+	print '---------------- | ----- | --- | --- | --- | --- | --- |'
 	refinedParty = []
 	for monster in myParty:
 		if monster[5] > userThreshold and monster[6].nickname != str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]):
-			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].nickname)
-			refinedParty.append(monster)
+			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].favorite, monster[6].nickname)
+			if monster[6].favorite == 0:
+				refinedParty.append(monster)
 	
 	# Show how many it will set as favorite and if they want to continue
 	if len(refinedParty) == 0:
