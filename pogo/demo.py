@@ -7,6 +7,7 @@ import operator
 import random
 import getpass
 import os.path
+import math
 
 import POGOProtos.Enums.PokemonMove_pb2 as PokemonMove_pb2
 
@@ -309,9 +310,10 @@ def viewCounts(session):
 	if saveCSV == 'y':
 		f.write('NAME,COUNT,CANDIES,EVOLVE\n')
 		
-	print '\n NAME            | COUNT | CANDIES | EVOLVE '
-	print '---------------- | ----- | ------- | ------ '
+	print '\n NAME            | COUNT | CANDIES | TRANSFER | EVOLVE'
+	print '---------------- | ----- | ------- | -------- | ------'
 	for monster in countList:
+		transfer = ''
 		evolutions = ''
 		skipCount = 0
 		pokedexNum = getattr(pokedex, monster[0])
@@ -328,12 +330,13 @@ def viewCounts(session):
 					candies = 0
 
 		if(pokedex.evolves[pokedexNum]):
-			evolutions = min(monster[1],int((candies-1)/pokedex.evolves[pokedexNum]))
+			transfer = max(int(math.ceil(monster[1] - ((monster[1] + candies -1) / (pokedex.evolves[pokedexNum]-1)))),0)
+			evolutions = monster[1] - transfer
 			if evolutions > 0 and skipCount == 0:
 				countEvolutions += evolutions
 			if evolutions == 0:
 				evolutions = ''
-		print ' %-15s | %-5d | %-7d | %s ' % (monster[0], monster[1], candies, evolutions)
+		print ' %-15s | %-5d | %-7d | %-8s | %-6s |' % (monster[0], monster[1], candies, transfer, evolutions)
 		# Write to the CSV
 		if saveCSV == 'y':
 			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(candies) + ',' + str(evolutions) + '\n')
