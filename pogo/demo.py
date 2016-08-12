@@ -271,6 +271,81 @@ def massRename(session):
 	
 	mainMenu(session)
 	
+def AskUserPokemonToRemove(session, countList):
+	pokemon_name = 'tmp'
+	filtered_list = []
+	while (pokemon_name != ''):
+		pokemon_name = raw_input('\nName the extra Pokemon you would like to transfer or just press enter to continue : ').upper()
+		if (pokemon_name != ''):
+			match = next((x for x in countList if x[0] == pokemon_name), 'notfound') #(x for x in countList if x[0] == pokemon_name)
+			if (match != 'notfound'):
+				logging.info('\n%s, %d to be removed.', match[0],match[3])
+				if (match not in filtered_list):
+					filtered_list.append(match)
+			else:
+				logging.info('Could not find this pokemon... : %s', pokemon_name);
+	return filtered_list;
+	
+def removeExtraPokemon(session, countList, party):
+	pokemon_party = {}
+	trade_pokemon = []
+	pokemonToRemove = AskUserPokemonToRemove(session, countList);
+	
+	rf = open(os.path.dirname(__file__) + '/../exceptions.config')
+	except_pokemon = rf.read().splitlines()
+	rf.close()
+	
+	
+	# Start printing the pokemon to remove
+	print 'Removing the following pokemon...\n'
+	print ' NAME            | CP    | ATK | DEF | STA | IV%'
+	print '---------------- | ----- | --- | --- | --- | ---'
+
+
+	# Build the party into a dictionary and display it
+	for p in sorted(party, key=lambda monster: (monster.pokemon_id, monster.cp)):
+		iv_percent = ((p.individual_attack + p.individual_defense + p.individual_stamina) * 100) / 45
+		pokemon_name = pokedex[p.pokemon_id]
+		if pokemon_name in except_pokemon:
+			continue
+		if p.favorite:
+			continue
+		if pokemon_name not in (x[0] for x in pokemonToRemove):
+			continue
+		if pokemon_name not in pokemon_party:
+			pokemon_party[pokemon_name] = []
+		if len(pokemon_party[pokemon_name]) < next(x[3] for x in countList if x[0] == pokemon_name):
+			pokemon_party[pokemon_name].append(p)
+			trade_pokemon.append(p)
+
+			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s ',
+						 pokedex[p.pokemon_id], p.cp, p.individual_attack,
+						 p.individual_defense, p.individual_stamina, iv_percent)
+
+	time.sleep(0.1)
+	
+	# Start removing the pokemon
+	if not len(trade_pokemon):
+		logging.info("\nNo Pokemon to be removed.")
+	else:
+		logging.info('\nCan safely remove %s Pokemon',len(trade_pokemon))
+
+		okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ').lower()
+
+		if okayToProceed == 'y':
+			outlier = 1
+			for index, pokemon in enumerate(trade_pokemon):
+				t = random.uniform(5.0, 7.0)
+				if index % outlier == 0:
+					outlier = random.randint(8, 12)
+					if index > 0:
+						t *= 3
+				print "Removed '%s'" % (pokedex[pokemon.pokemon_id].capitalize())
+				result = session.releasePokemon(pokemon)
+				time.sleep(t)
+		else:
+			logging.info('Aborting to mass trade of pokemon.')
+
 def viewCounts(session):
 	party = session.checkInventory().party
 	myParty = []
@@ -332,6 +407,7 @@ def viewCounts(session):
 		if(pokedex.evolves[pokedexNum]):
 			transfer = max(int(math.ceil(monster[1] - ((monster[1] + candies -1) / (pokedex.evolves[pokedexNum]-1)))),0)
 			evolutions = monster[1] - transfer
+			monster.append(transfer)
 			if evolutions > 0 and skipCount == 0:
 				countEvolutions += evolutions
 			if evolutions == 0:
@@ -347,7 +423,9 @@ def viewCounts(session):
 	if saveCSV == 'y':
 		logging.info('Saved to My_Pokemon_Counts.csv')
 		f.close()
-	
+	goInTransferMode = raw_input('Do you want to transfer some of your extra pokemons ? (y/n): ').lower()
+	if goInTransferMode == 'y':
+		removeExtraPokemon(session, countList, party)
 	mainMenu(session)
 	
 def viewPokemon(session):
