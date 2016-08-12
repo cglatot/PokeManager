@@ -270,6 +270,57 @@ def massRename(session):
 			time.sleep(t)
 	
 	mainMenu(session)
+
+def massFavorite(session):
+	party = session.checkInventory().party
+	myParty = []
+	
+	# Get the party and put it into a nicer list
+	for pokemon in party:
+		IvPercent = ((pokemon.individual_attack + pokemon.individual_defense + pokemon.individual_stamina)*100)/45
+		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon]
+		myParty.append(L)
+	
+	# Sort party by name and then IV percentage	
+	myParty.sort(key = operator.itemgetter(0, 5))
+	
+	# Ask the user to enter an IV threshold (to only rename good pokemon)
+	userThreshold = int(raw_input('Enter an IV% threshold to set Pokemon as favorite (0 will set all as favorite): '))
+	
+	# Refine a party with the IV threshold
+	print '\n NAME            | CP    | ATK | DEF | STA | IV% | Fav |'
+	print '---------------- | ----- | --- | --- | --- | --- | --- |'
+	refinedParty = []
+	for monster in myParty:
+		if monster[5] > userThreshold and monster[6].nickname != str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]):
+			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].favorite, monster[6].nickname)
+			if monster[6].favorite == 0:
+				refinedParty.append(monster)
+	
+	# Show how many it will set as favorite and if they want to continue
+	if len(refinedParty) == 0:
+		logging.info('\nNo Pokemon to be set favorite')
+		mainMenu(session)
+	
+	logging.info('\nThis will set as favorite %s Pokemons.',len(refinedParty))
+	okayToProceed = raw_input('Do you want to set these Pokemon as favorite? (y/n): ').lower()
+	
+	# Set pokemon as favorite! Use randomness to reduce chance of bot detection
+	outlier = random.randint(8,12)
+	index = 0
+	if okayToProceed == 'y':
+		for monster in refinedParty:
+			index = index + 1
+			session.setFavoritePokemon(monster[6], True)
+			logging.info('Set Favorite ' + monster[0])
+			t = random.uniform(4.0, 8.0)
+			if index == outlier:
+				t = t * 2
+				outlier = random.randint(8,12)
+				index = 0
+			time.sleep(t)
+	
+	mainMenu(session)
 	
 def viewCounts(session):
 	party = session.checkInventory().party
@@ -410,7 +461,8 @@ def mainMenu(session):
 	print '  3: Transfer Pokemon'
 	print '  4: Transfer Duplicate Pokemon'
 	print '  5: Rename Pokemon'
-	print '  6: Exit'
+	print '  6: Set Favorite'
+	print '  7: Exit'
 
 	menuChoice = int(raw_input("\nEnter choice: "))
 	if menuChoice == 1: viewPokemon(session)
@@ -418,7 +470,8 @@ def mainMenu(session):
 	elif menuChoice == 3: massRemove(session)
 	elif menuChoice == 4: massRemoveNonUnique(session)
 	elif menuChoice == 5: massRename(session)
-	elif menuChoice == 6: quit()
+	elif menuChoice == 6: massFavorite(session)
+	elif menuChoice == 7: quit()
 	else: quit()
 		
 		

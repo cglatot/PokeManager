@@ -545,7 +545,7 @@ class PogoSession(object):
 
         # Create Request
         payload = [Request_pb2.Request(
-            request_type = RequestType_pb2.SETFAVORITEPOKEMONMESSAGE,
+            request_type = RequestType_pb2.SET_FAVORITE_POKEMON,
             request_message = SetFavoritePokemonMessage_pb2.SetFavoritePokemonMessage(
                 pokemon_id = pokemon.id,
                 is_favorite = is_favorite
