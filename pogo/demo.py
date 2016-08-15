@@ -8,6 +8,7 @@ import random
 import getpass
 import os.path
 import math
+import platform
 
 import POGOProtos.Enums.PokemonMove_pb2 as PokemonMove_pb2
 
@@ -579,6 +580,15 @@ if __name__ == '__main__':
     # Check password
     if args.password == None:
     	args.password = getpass.getpass()
+
+	# Check that the exceptions file exists.
+	print "  Python Version : {}".format(platform.python_version())
+	print "        __file__ : {}".format(__file__)
+	print "dirname __file__ : {}".format(os.path.dirname(__file__))
+	exceptions_file = os.path.abspath(os.path.dirname(__file__) + '/../exceptions.config')
+	if not os.path.isfile(exceptions_file):
+		logging.error("No Exceptions file found - '{}'".format(exceptions_file))
+		sys.exit(-2)
 
     # Create PokoAuthObject
     poko_session = PokeAuthSession(
