@@ -68,7 +68,7 @@ def massRemove(session):
 	print ' NAME            | CP    | ATK | DEF | STA | IV% '
 	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in safeParty:
-		if monster[0] == userPokemon or userPokemon == 'ALL' and monster[0] not in exceptionList:
+		if monster[0] == userPokemon or userPokemon == 'ALL' and monster[0] not in exceptionList and monster[6].nickname == '':
 			if monster[5] > 74:
 				logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])
 			elif monster[5] > 49:
@@ -245,7 +245,7 @@ def massRename(session):
 	print '---------------- | ----- | --- | --- | --- | ----'
 	refinedParty = []
 	for monster in myParty:
-		if monster[5] > userThreshold and monster[6].nickname != str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]):
+		if monster[5] > userThreshold and monster[6].nickname == '':
 			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].nickname)
 			refinedParty.append(monster)
 	
