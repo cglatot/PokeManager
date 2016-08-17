@@ -526,7 +526,7 @@ def viewPokemon(session):
 	print '\n NAME            | CP    | ATK | DEF | STA | IV% | MOVE 1          | MOVE 2        | CAPTURE DATE '
 	print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- | ------------ '
 	for monster in myParty:
-		date = datetime.datetime.fromtimestamp(monster[9] / 1e3).strftime('%d/%m/%Y')
+		date = datetime.datetime.fromtimestamp(monster[9] / 1e3).strftime('%m/%d/%Y')
 		# Write to the CSV
 		if saveCSV == 'y':
 			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(monster[2]) + ',' + str(monster[3]) + ',' + str(monster[4]) + ',' + str(monster[5]) + ',' + monster[7] + ',' + monster[8] + ',' + date + '\n')
