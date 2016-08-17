@@ -9,6 +9,9 @@ import getpass
 import os.path
 import math
 import platform
+import platform
+import datetime
+import math
 
 import POGOProtos.Enums.PokemonMove_pb2 as PokemonMove_pb2
 
@@ -68,7 +71,7 @@ def massRemove(session):
 	print ' NAME            | CP    | ATK | DEF | STA | IV% '
 	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in safeParty:
-		if monster[0] == userPokemon or userPokemon == 'ALL' and monster[0] not in exceptionList:
+		if monster[0] == userPokemon or userPokemon == 'ALL' and monster[0] not in exceptionList and monster[6].nickname == '':
 			if monster[5] > 74:
 				logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])
 			elif monster[5] > 49:
@@ -246,7 +249,7 @@ def massRename(session):
 	print '---------------- | ----- | --- | --- | --- | ----'
 	refinedParty = []
 	for monster in myParty:
-		if monster[5] > userThreshold and monster[6].nickname != str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]):
+		if monster[5] > userThreshold and monster[6].nickname == '':
 			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].nickname)
 			refinedParty.append(monster)
 	
@@ -494,7 +497,7 @@ def viewPokemon(session):
 		move_1 = PokemonMove_pb2.PokemonMove.Name(pokemon.move_1)
 		move_1 = move_1[:-5]
 		move_2 = PokemonMove_pb2.PokemonMove.Name(pokemon.move_2)
-		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon,move_1,move_2]
+		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon,move_1,move_2, pokemon.creation_time_ms]
 		myParty.append(L)
 	
 	# Sort party by name and then IV percentage	
@@ -509,23 +512,24 @@ def viewPokemon(session):
 	i = 0
 	# Write headings to the CSV
 	if saveCSV == 'y':
-		f.write('NAME,CP,ATK,DEF,STA,IV%,MOVE 1,MOVE 2\n')
+		f.write('NAME,CP,ATK,DEF,STA,IV%,MOVE 1,MOVE 2,CAPTURE DATE\n')
 		
-	print '\n NAME            | CP    | ATK | DEF | STA | IV% | MOVE 1          | MOVE 2          '
-	print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
+	print '\n NAME            | CP    | ATK | DEF | STA | IV% | MOVE 1          | MOVE 2        | CAPTURE DATE '
+	print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- | ------------ '
 	for monster in myParty:
+		date = datetime.datetime.fromtimestamp(monster[9] / 1e3).strftime('%d/%m/%Y')
 		# Write to the CSV
 		if saveCSV == 'y':
-			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(monster[2]) + ',' + str(monster[3]) + ',' + str(monster[4]) + ',' + str(monster[5]) + ',' + monster[7] + ',' + monster[8] + '\n')
+			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(monster[2]) + ',' + str(monster[3]) + ',' + str(monster[4]) + ',' + str(monster[5]) + ',' + monster[7] + ',' + monster[8] + ',' + date + '\n')
 		if i > 0:
 			if myParty[i][0] != myParty[i-1][0]:
 				print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
 		if monster[5] > 74:
-			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
+			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8],date)
 		elif monster[5] > 49:
-			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
+			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8],date)
 		else:
-			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
+			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8],date)
 		i = i+1
 	
 	# Close the CSV
