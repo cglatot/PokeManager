@@ -7,6 +7,8 @@ import operator
 import random
 import getpass
 import os.path
+import math
+import platform
 import platform
 import datetime
 import math
@@ -217,8 +219,9 @@ def massRemoveNonUnique(session):
 					outlier = random.randint(8, 12)
 					if index > 0:
 						t *= 3
-				print "Removed '%s'" % (pokedex[pokemon.pokemon_id].capitalize())
-				result = session.releasePokemon(pokemon)
+				if not pokemon.favorite:
+					print "Removed '%s'" % (pokedex[pokemon.pokemon_id].capitalize())
+					result = session.releasePokemon(pokemon)
 				time.sleep(t)
 		else:
 			logging.info('Aborting to mass trade of pokemon.')
@@ -326,6 +329,99 @@ def massFavorite(session):
 	
 	mainMenu(session)
 	
+def AskUserPokemonToRemove(session, countList):
+	pokemon_name = 'tmp'
+	filtered_list = []
+	while (pokemon_name != ''):
+		pokemon_name = raw_input('\nName the extra Pokemon you would like to transfer or just press enter to continue : ').upper()
+		if (pokemon_name != ''):
+			match = next((x for x in countList if x[0] == pokemon_name), 'notfound')
+			# Confirm to the uer how many pokemon he should remove to be optimized
+			if (match != 'notfound'):
+				logging.info('%s, %d to be removed.', match[0],match[3])
+				if (match not in filtered_list):
+					filtered_list.append(match)
+			else:
+				logging.info('Could not find this pokemon... : %s', pokemon_name);
+	# When user presses just enter, it continues
+	return filtered_list;
+	
+def removeExtraPokemon(session, countList, party):
+	pokemon_party = {}
+	trade_pokemon = []
+	
+	#Ask user which kind of pokemons he wants to remove the extra
+	pokemonToRemove = AskUserPokemonToRemove(session, countList);
+	
+	rf = open(os.path.dirname(__file__) + '/../exceptions.config')
+	except_pokemon = rf.read().splitlines()
+	rf.close()
+	
+	# Ask the user if he prefers a CP or an IV cut
+	cpOrIV = ''
+	while not (cpOrIV == 'cp' or cpOrIV == 'iv' or cpOrIV == 'cancel'):
+		cpOrIV = raw_input('Do you want to transfer Pokemon with lower CP or IV%? (cp/iv/cancel): ').lower()
+	
+	if cpOrIV == 'cp':
+		sortedList = sorted(party, key=lambda monster: (monster.pokemon_id, monster.cp))
+	elif cpOrIV == 'iv':
+		sortedList = sorted(party, key=lambda monster: (monster.pokemon_id, (((monster.individual_attack + monster.individual_defense + monster.individual_stamina)*100)/45)))
+	else:
+		return
+	
+	# Start printing the pokemon to remove
+	print 'Removing the following pokemon...\n'
+	print ' NAME            | CP    | ATK | DEF | STA | IV%'
+	print '---------------- | ----- | --- | --- | --- | ---'
+
+
+	# Build the party into a dictionary and display it
+	for p in sortedList:
+		iv_percent = ((p.individual_attack + p.individual_defense + p.individual_stamina) * 100) / 45
+		pokemon_name = pokedex[p.pokemon_id]
+		#Pokemons in except list and se as favorite are protected
+		if pokemon_name in except_pokemon:
+			continue
+		if p.favorite:
+			continue
+		if pokemon_name not in (x[0] for x in pokemonToRemove):
+			continue
+		if pokemon_name not in pokemon_party:
+			pokemon_party[pokemon_name] = []
+		if len(pokemon_party[pokemon_name]) < next(x[3] for x in countList if x[0] == pokemon_name):
+			pokemon_party[pokemon_name].append(p)
+			trade_pokemon.append(p)
+
+			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s ',
+						 pokedex[p.pokemon_id], p.cp, p.individual_attack,
+						 p.individual_defense, p.individual_stamina, iv_percent)
+
+	time.sleep(0.1)
+	
+	# Ask the user to confirm one last time then
+	# Start removing the pokemon
+	if not len(trade_pokemon):
+		logging.info("\nNo Pokemon to be removed.")
+	else:
+		logging.info('\nCan safely remove %s Pokemon',len(trade_pokemon))
+
+		okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ').lower()
+
+		if okayToProceed == 'y':
+		# Introduce randomness to emulate human behavior
+			outlier = 1
+			for index, pokemon in enumerate(trade_pokemon):
+				t = random.uniform(5.0, 7.0)
+				if index % outlier == 0:
+					outlier = random.randint(8, 12)
+					if index > 0:
+						t *= 3
+				print "Removed '%s'" % (pokedex[pokemon.pokemon_id].capitalize())
+				result = session.releasePokemon(pokemon)
+				time.sleep(t)
+		else:
+			logging.info('Aborting to mass trade of pokemon.')
+
 def viewCounts(session):
 	party = session.checkInventory().party
 	myParty = []
@@ -387,6 +483,7 @@ def viewCounts(session):
 		if(pokedex.evolves[pokedexNum]):
 			transfer = max(int(math.ceil(monster[1] - ((monster[1] + candies -1) / (pokedex.evolves[pokedexNum]-1)))),0)
 			evolutions = monster[1] - transfer
+			monster.append(transfer)
 			if evolutions > 0 and skipCount == 0:
 				countEvolutions += evolutions
 			if evolutions == 0:
@@ -402,7 +499,11 @@ def viewCounts(session):
 	if saveCSV == 'y':
 		logging.info('Saved to My_Pokemon_Counts.csv')
 		f.close()
-	
+		
+	# Ask User if he wants to transfer some of the pokemons he has in extra (according to the chart above)
+	goInTransferMode = raw_input('Do you want to transfer some of your extra pokemons ? (y/n): ').lower()
+	if goInTransferMode == 'y':
+		removeExtraPokemon(session, countList, party)
 	mainMenu(session)
 	
 def viewPokemon(session):
@@ -416,7 +517,7 @@ def viewPokemon(session):
 		move_1 = PokemonMove_pb2.PokemonMove.Name(pokemon.move_1)
 		move_1 = move_1[:-5]
 		move_2 = PokemonMove_pb2.PokemonMove.Name(pokemon.move_2)
-		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon,move_1,move_2, pokemon.creation_time_ms]
+		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon,move_1,move_2]
 		myParty.append(L)
 	
 	# Sort party by name and then IV percentage	
@@ -431,24 +532,23 @@ def viewPokemon(session):
 	i = 0
 	# Write headings to the CSV
 	if saveCSV == 'y':
-		f.write('NAME,CP,ATK,DEF,STA,IV%,MOVE 1,MOVE 2,CAPTURE DATE\n')
+		f.write('NAME,CP,ATK,DEF,STA,IV%,MOVE 1,MOVE 2\n')
 		
-	print '\n NAME            | CP    | ATK | DEF | STA | IV% | MOVE 1          | MOVE 2        | CAPTURE DATE '
-	print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- | ------------ '
+	print '\n NAME            | CP    | ATK | DEF | STA | IV% | MOVE 1          | MOVE 2          '
+	print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
 	for monster in myParty:
-		date = datetime.datetime.fromtimestamp(monster[9] / 1e3).strftime('%d/%m/%Y')
 		# Write to the CSV
 		if saveCSV == 'y':
-			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(monster[2]) + ',' + str(monster[3]) + ',' + str(monster[4]) + ',' + str(monster[5]) + ',' + monster[7] + ',' + monster[8] + ',' + date + '\n')
+			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(monster[2]) + ',' + str(monster[3]) + ',' + str(monster[4]) + ',' + str(monster[5]) + ',' + monster[7] + ',' + monster[8] + '\n')
 		if i > 0:
 			if myParty[i][0] != myParty[i-1][0]:
 				print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
 		if monster[5] > 74:
-			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8],date)
+			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
 		elif monster[5] > 49:
-			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8],date)
+			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
 		else:
-			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8],date)
+			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
 		i = i+1
 	
 	# Close the CSV
