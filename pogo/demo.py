@@ -335,23 +335,29 @@ def AskUserPokemonToRemove(session, countList):
 	while (pokemon_name != ''):
 		pokemon_name = raw_input('\nName the extra Pokemon you would like to transfer or just press enter to continue : ').upper()
 		if (pokemon_name != ''):
-			match = next((x for x in countList if x[0] == pokemon_name), 'notfound') #(x for x in countList if x[0] == pokemon_name)
+			match = next((x for x in countList if x[0] == pokemon_name), 'notfound')
+			# Confirm to the uer how many pokemon he should remove to be optimized
 			if (match != 'notfound'):
-				logging.info('\n%s, %d to be removed.', match[0],match[3])
+				logging.info('%s, %d to be removed.', match[0],match[3])
 				if (match not in filtered_list):
 					filtered_list.append(match)
 			else:
 				logging.info('Could not find this pokemon... : %s', pokemon_name);
+	# When user presses just enter, it continues
 	return filtered_list;
 	
 def removeExtraPokemon(session, countList, party):
 	pokemon_party = {}
 	trade_pokemon = []
+	
+	#Ask user which kind of pokemons he wants to remove the extra
 	pokemonToRemove = AskUserPokemonToRemove(session, countList);
 	
 	rf = open(os.path.dirname(__file__) + '/../exceptions.config')
 	except_pokemon = rf.read().splitlines()
 	rf.close()
+	
+	# Ask the user if he prefers a CP or an IV cut
 	cpOrIV = ''
 	while not (cpOrIV == 'cp' or cpOrIV == 'iv' or cpOrIV == 'cancel'):
 		cpOrIV = raw_input('Do you want to transfer Pokemon with lower CP or IV%? (cp/iv/cancel): ').lower()
@@ -373,6 +379,7 @@ def removeExtraPokemon(session, countList, party):
 	for p in sortedList:
 		iv_percent = ((p.individual_attack + p.individual_defense + p.individual_stamina) * 100) / 45
 		pokemon_name = pokedex[p.pokemon_id]
+		#Pokemons in except list and se as favorite are protected
 		if pokemon_name in except_pokemon:
 			continue
 		if p.favorite:
@@ -391,6 +398,7 @@ def removeExtraPokemon(session, countList, party):
 
 	time.sleep(0.1)
 	
+	# Ask the user to confirm one last time then
 	# Start removing the pokemon
 	if not len(trade_pokemon):
 		logging.info("\nNo Pokemon to be removed.")
@@ -400,6 +408,7 @@ def removeExtraPokemon(session, countList, party):
 		okayToProceed = raw_input('Do you want to transfer these Pokemon? (y/n): ').lower()
 
 		if okayToProceed == 'y':
+		# Introduce randomness to emulate human behavior
 			outlier = 1
 			for index, pokemon in enumerate(trade_pokemon):
 				t = random.uniform(5.0, 7.0)
@@ -490,6 +499,8 @@ def viewCounts(session):
 	if saveCSV == 'y':
 		logging.info('Saved to My_Pokemon_Counts.csv')
 		f.close()
+		
+	# Ask User if he wants to transfer some of the pokemons he has in extra (according to the chart above)
 	goInTransferMode = raw_input('Do you want to transfer some of your extra pokemons ? (y/n): ').lower()
 	if goInTransferMode == 'y':
 		removeExtraPokemon(session, countList, party)
