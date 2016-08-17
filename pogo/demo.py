@@ -9,6 +9,7 @@ import getpass
 import os.path
 import platform
 import datetime
+import math
 
 import POGOProtos.Enums.PokemonMove_pb2 as PokemonMove_pb2
 
@@ -68,7 +69,7 @@ def massRemove(session):
 	print ' NAME            | CP    | ATK | DEF | STA | IV% '
 	print '---------------- | ----- | --- | --- | --- | ----'
 	for monster in safeParty:
-		if monster[0] == userPokemon or userPokemon == 'ALL' and monster[0] not in exceptionList:
+		if monster[0] == userPokemon or userPokemon == 'ALL' and monster[0] not in exceptionList and monster[6].nickname == '':
 			if monster[5] > 74:
 				logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5])
 			elif monster[5] > 49:
@@ -245,7 +246,7 @@ def massRename(session):
 	print '---------------- | ----- | --- | --- | --- | ----'
 	refinedParty = []
 	for monster in myParty:
-		if monster[5] > userThreshold and monster[6].nickname != str(monster[5]) + '-' + str(monster[2]) + '/' + str(monster[3]) + '/' + str(monster[4]):
+		if monster[5] > userThreshold and monster[6].nickname == '':
 			logging.info(' %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %s',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[6].nickname)
 			refinedParty.append(monster)
 	
@@ -362,11 +363,12 @@ def viewCounts(session):
 	
 	# Print the list of pokemon in a nicer format
 	if saveCSV == 'y':
-		f.write('NAME,COUNT,CANDIES,EVOLVE\n')
+		f.write('NAME,COUNT,CANDIES,TRANSFER,EVOLVE\n')
 		
-	print '\n NAME            | COUNT | CANDIES | EVOLVE '
-	print '---------------- | ----- | ------- | ------ '
+	print '\n NAME            | COUNT | CANDIES | TRANSFER | EVOLVE'
+	print '---------------- | ----- | ------- | -------- | ------'
 	for monster in countList:
+		transfer = ''
 		evolutions = ''
 		skipCount = 0
 		pokedexNum = getattr(pokedex, monster[0])
@@ -383,15 +385,16 @@ def viewCounts(session):
 					candies = 0
 
 		if(pokedex.evolves[pokedexNum]):
-			evolutions = min(monster[1],int((candies-1)/pokedex.evolves[pokedexNum]))
+			transfer = max(int(math.ceil(monster[1] - ((monster[1] + candies -1) / (pokedex.evolves[pokedexNum]-1)))),0)
+			evolutions = monster[1] - transfer
 			if evolutions > 0 and skipCount == 0:
 				countEvolutions += evolutions
 			if evolutions == 0:
 				evolutions = ''
-		print ' %-15s | %-5d | %-7d | %s ' % (monster[0], monster[1], candies, evolutions)
+		print ' %-15s | %-5d | %-7d | %-8s | %-6s |' % (monster[0], monster[1], candies, transfer, evolutions)
 		# Write to the CSV
 		if saveCSV == 'y':
-			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(candies) + ',' + str(evolutions) + '\n')
+			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(candies) + ',' + str(transfer)+ ',' + str(evolutions) + '\n')
 	
 	logging.info('\nYou can evolve a total of %s Base Pokemon.', countEvolutions)
 	
