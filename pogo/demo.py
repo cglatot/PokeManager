@@ -352,7 +352,16 @@ def removeExtraPokemon(session, countList, party):
 	rf = open(os.path.dirname(__file__) + '/../exceptions.config')
 	except_pokemon = rf.read().splitlines()
 	rf.close()
+	cpOrIV = ''
+	while not (cpOrIV == 'cp' or cpOrIV == 'iv' or cpOrIV == 'cancel'):
+		cpOrIV = raw_input('Do you want to transfer Pokemon with lower CP or IV%? (cp/iv/cancel): ').lower()
 	
+	if cpOrIV == 'cp':
+		sortedList = sorted(party, key=lambda monster: (monster.pokemon_id, monster.cp))
+	elif cpOrIV == 'iv':
+		sortedList = sorted(party, key=lambda monster: (monster.pokemon_id, (((monster.individual_attack + monster.individual_defense + monster.individual_stamina)*100)/45)))
+	else:
+		return
 	
 	# Start printing the pokemon to remove
 	print 'Removing the following pokemon...\n'
@@ -361,7 +370,7 @@ def removeExtraPokemon(session, countList, party):
 
 
 	# Build the party into a dictionary and display it
-	for p in sorted(party, key=lambda monster: (monster.pokemon_id, monster.cp)):
+	for p in sortedList:
 		iv_percent = ((p.individual_attack + p.individual_defense + p.individual_stamina) * 100) / 45
 		pokemon_name = pokedex[p.pokemon_id]
 		if pokemon_name in except_pokemon:
