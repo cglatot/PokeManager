@@ -531,8 +531,13 @@ def viewPokemon(session):
 										 pokemon.individual_attack + pokemon.individual_defense + pokemon.individual_stamina) * 100) / 45
 		myParty.append(pokemon_dict)
 
-	# Sort party by name and then IV percentage
-	myParty.sort(key=operator.itemgetter('name', 'IvPercent'))
+	# Ask for an alphabetical or Pokedex sorting
+	sortBy = int(raw_input('How to sort the list? (1 = Alphabetically, 2 = Pokedex): '))
+	if sortBy == 2:  # Alphabetical sorting
+		myParty.sort(key=operator.itemgetter('IvPercent'), reverse=True)
+		myParty.sort(key=operator.itemgetter('pokedex_num'))
+	else:  # Pokedex sorting
+		myParty.sort(key=operator.itemgetter('name', 'IvPercent'))
 
 	# Ask if they want to save to CSV
 	saveCSV = raw_input('Do you want to export to CSV file? (y/n): ').lower()
