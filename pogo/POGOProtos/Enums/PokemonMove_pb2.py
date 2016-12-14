@@ -750,6 +750,10 @@ _POKEMONMOVE = _descriptor.EnumDescriptor(
       name='ROCK_SMASH_FAST', index=179, number=241,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TRANSFORM_FAST', index=180, number=242,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
@@ -939,6 +943,7 @@ FEINT_ATTACK_FAST = 238
 STEEL_WING_FAST = 239
 FIRE_FANG_FAST = 240
 ROCK_SMASH_FAST = 241
+TRANSFORM = 242
 
 
 DESCRIPTOR.enum_types_by_name['PokemonMove'] = _POKEMONMOVE
