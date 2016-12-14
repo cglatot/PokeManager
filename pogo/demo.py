@@ -533,10 +533,10 @@ def viewPokemon(session):
 
 	# Ask for an alphabetical or Pokedex sorting
 	sortBy = int(raw_input('How to sort the list? (1 = Alphabetically, 2 = Pokedex): '))
-	if sortBy == 2:  # Alphabetical sorting
+	if sortBy == 2:  # Pokedex sorting
 		myParty.sort(key=operator.itemgetter('IvPercent'), reverse=True)
 		myParty.sort(key=operator.itemgetter('pokedex_num'))
-	else:  # Pokedex sorting
+	else:  # Alphabetical sorting
 		myParty.sort(key=operator.itemgetter('name', 'IvPercent'))
 
 	# Ask if they want to save to CSV
