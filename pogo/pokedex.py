@@ -156,6 +156,14 @@ class Pokedex(dict):
     DRAGONITE = 149
     MEWTWO = 150
     MEW = 151
+    PICHU = 172
+    PII = 173
+    FLUFFELUFF = 174
+    TOGEPI = 175
+    TOGETIC = 176
+    KUSSILA = 238
+    ELEKID = 239
+    MAGBY = 240
 
     rarity = {}
     evolves = {}
