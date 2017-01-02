@@ -509,46 +509,71 @@ def viewCounts(session):
 def viewPokemon(session):
 	party = session.checkInventory().party
 	myParty = []
-	
-	# Get the party and put it into a nicer list
+
+	# Get the party and put it into a nicer dict
 	for pokemon in party:
-		IvPercent = ((pokemon.individual_attack + pokemon.individual_defense + pokemon.individual_stamina)*100)/45
+		pokemon_dict = {
+			'name': pokedex[pokemon.pokemon_id],
+			'pokedex_num': pokemon.pokemon_id,
+			'cp': pokemon.cp,
+			'individual_attack': pokemon.individual_attack,
+			'individual_defense': pokemon.individual_defense,
+			'individual_stamina': pokemon.individual_stamina,
+		}
+
 		# Get the names of the moves and remove the _FAST part of move 1
 		move_1 = PokemonMove_pb2.PokemonMove.Name(pokemon.move_1)
-		move_1 = move_1[:-5]
-		move_2 = PokemonMove_pb2.PokemonMove.Name(pokemon.move_2)
-		L = [pokedex[pokemon.pokemon_id],pokemon.cp,pokemon.individual_attack,pokemon.individual_defense,pokemon.individual_stamina,IvPercent,pokemon,move_1,move_2]
-		myParty.append(L)
-	
-	# Sort party by name and then IV percentage	
-	myParty.sort(key = operator.itemgetter(0, 5))
-	
+		pokemon_dict['move_1'] = move_1[:-5]
+		pokemon_dict['move_2'] = PokemonMove_pb2.PokemonMove.Name(pokemon.move_2)
+
+		# IV% calculation
+		pokemon_dict['IvPercent'] = ((
+										 pokemon.individual_attack + pokemon.individual_defense + pokemon.individual_stamina) * 100) / 45
+		myParty.append(pokemon_dict)
+
+	# Ask for an alphabetical or Pokedex sorting
+	sortBy = int(raw_input('How to sort the list? (1 = Alphabetically, 2 = Pokedex): '))
+	if sortBy == 2:  # Pokedex sorting
+		myParty.sort(key=operator.itemgetter('IvPercent'), reverse=True)
+		myParty.sort(key=operator.itemgetter('pokedex_num'))
+	else:  # Alphabetical sorting
+		myParty.sort(key=operator.itemgetter('name', 'IvPercent'))
+
 	# Ask if they want to save to CSV
 	saveCSV = raw_input('Do you want to export to CSV file? (y/n): ').lower()
 	if saveCSV == 'y':
 		f = open('My_Pokemon.csv', 'w')
-	
+
 	# Display the pokemon, with color coding for IVs and separation between types of pokemon
 	i = 0
 	# Write headings to the CSV
 	if saveCSV == 'y':
 		f.write('NAME,CP,ATK,DEF,STA,IV%,MOVE 1,MOVE 2\n')
-		
+
 	print '\n NAME            | CP    | ATK | DEF | STA | IV% | MOVE 1          | MOVE 2          '
 	print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
 	for monster in myParty:
 		# Write to the CSV
 		if saveCSV == 'y':
-			f.write(monster[0] + ',' + str(monster[1]) + ',' + str(monster[2]) + ',' + str(monster[3]) + ',' + str(monster[4]) + ',' + str(monster[5]) + ',' + monster[7] + ',' + monster[8] + '\n')
+			f.write(monster['name'] + ',' + str(monster['cp']) + ',' +
+                    str(monster['individual_attack']) + ',' + str(monster['individual_defense']) + ',' +
+                    str(monster['individual_stamina']) + ',' + str(monster['IvPercent']) + ',' + monster['move_1'] +
+                    ',' + monster['move_2'] + '\n')
 		if i > 0:
-			if myParty[i][0] != myParty[i-1][0]:
+			if myParty[i]['name'] != myParty[i-1]['name']:
 				print '---------------- | ----- | --- | --- | --- | --- | --------------- | --------------- '
-		if monster[5] > 74:
-			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
-		elif monster[5] > 49:
-			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
+		if monster['IvPercent'] > 74:
+			logging.info('\033[1;32;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster['name'],
+                         monster['cp'], monster['individual_attack'], monster['individual_defense'],
+                         monster['individual_stamina'], monster['IvPercent'], monster['move_1'], monster['move_2'])
+		elif monster['IvPercent'] > 49:
+			logging.info('\033[1;33;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster['name'],
+                         monster['cp'], monster['individual_attack'], monster['individual_defense'],
+                         monster['individual_stamina'], monster['IvPercent'], monster['move_1'], monster['move_2'])
 		else:
-			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster[0],monster[1],monster[2],monster[3],monster[4],monster[5],monster[7],monster[8])
+			logging.info('\033[1;37;40m %-15s | %-5s | %-3s | %-3s | %-3s | %-3s | %-15s | %s \033[0m',monster['name'],
+                         monster['cp'], monster['individual_attack'], monster['individual_defense'],
+                         monster['individual_stamina'], monster['IvPercent'], monster['move_1'], monster['move_2'])
 		i = i+1
 	
 	# Close the CSV
@@ -599,7 +624,7 @@ if __name__ == '__main__':
     if args.auth not in ['ptc', 'google']:
         logging.error('Invalid auth service {}'.format(args.auth))
         sys.exit(-1)
-        
+
     # Check password
     if args.password == None:
     	args.password = getpass.getpass()
